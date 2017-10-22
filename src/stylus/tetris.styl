@@ -1,0 +1,140 @@
+$yellow = #ffd605;
+$green = #7ddf66;
+$gray = #999;
+
+.capricorncd-tetris-container
+  position: relative;
+  .tetris-stage
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 200px;
+    height: 400px;
+    &:after
+      display: block;
+      position: relative;
+      z-index: -1;
+      top: 50%;
+      margin-top: -7px;
+      width: 100%;
+      text-align: center;
+      font-size: 14px;
+      line-height: 1;
+      color: #fff;
+      content: '©Capricorncd';
+      filter: unquote('Alpha(opacity=10)');
+      opacity: .1;
+  .tetris-sider-wrapper
+    position: absolute;
+    top: 0;
+    left: 210px;
+    height: 400px;
+    .next-square
+      width: 80px;
+      height: 80px;
+    .tetris-statistics
+      margin-top: 40px;
+      .game-times
+        color: #fff;
+      .game-scores
+        margin-top: 20px;
+        color: #fff;
+    .control-wrapper
+      position: absolute;
+      left: 0;
+      bottom: 50px;
+      button
+        margin: 0 0 20px 0;
+        width: 80px;
+        height: 30px;
+        text-align: center;
+        color: $yellow;
+        border: 1px solid $yellow;
+        border-radius: 24px;
+        background: none;
+        &.tetris-setup
+          color: $gray;
+          border-color: $gray;
+        &.tetris-pause
+          color: $green;
+          border-color: $green;
+  button
+    outline: none;
+    cursor: pointer;
+  .current
+    background: url('../img/theme/red.png') no-repeat 0 0;
+  .done
+    background: url('../img/theme/green.png') no-repeat 0 0;
+  .none
+    background: url('../img/theme/none.png') no-repeat 0 0;
+    filter: unquote('Alpha(opacity=20)');
+    opacity: .2;
+  .next-square
+    .current
+      background: url('../img/theme/yellow.png') no-repeat 0 0;
+      background-size: cover;
+    .none
+      background: none;
+  .none, .current, .done
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    box-sizing: border-box;
+    background-size: cover;
+  .tetris-control-wrapper
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    .grid-wrapper
+      display: flex;
+      .grid
+        flex: 1;
+        button
+          display: block;
+          width: 100%;
+          height: 40px;
+          color: $gray;
+          border: 1px solid $gray;
+          background: none;
+          box-sizing: border-box;
+          &.btn-left
+            border-right: 0;
+          &.btn-right
+            border-left: 0;
+          &.btn-rotate
+            border-bottom: 0;
+          &.btn-down
+            border-top: 0;
+
+.game-over
+  .tetris-pause
+    color: #999 !important;
+    border-color: #999 !important;
+  .done
+    background: url('../img/theme/red.png') no-repeat 0 0;
+    background-size: cover;
+
+@media screen and (min-width: 375px)
+  .capricorncd-tetris-container
+    .tetris-control-wrapper
+      position: absolute;
+      top: 420px;
+      max-width: 320px;
+
+/* IE9及以下版本 */
+.ie-brower
+  .tetris-control-wrapper
+    position: absolute;
+    top: 420px;
+    left: 0;
+    width: 320px;
+    .grid-wrapper
+      height: 42px;
+      overflow: hidden;
+      .grid
+        float: left;
+        width: 33.3%;
+        &:after
+          content: '.';
+          font-size: 1px;
