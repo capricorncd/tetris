@@ -62,11 +62,11 @@ const CAPR: any = {
       return 0
     }
   },
-  isAndroid: !!navigator.userAgent.match(/android/ig),
-  isIos: !!navigator.userAgent.match(/(iphone|ipod|ios|ipad)/ig),
-  isMobile: !!navigator.userAgent.match(/(android|iphone|ipod|ios|ipad)/ig),
-  isWin: navigator.platform == "Win32" || navigator.platform == "Windows",
-  isMac: navigator.platform == "Mac68K" || navigator.platform == "MacPPC" || navigator.platform == "Macintosh" || navigator.platform == "MacIntel",
+  // isAndroid: !!navigator.userAgent.match(/android/ig),
+  // isIos: !!navigator.userAgent.match(/(iphone|ipod|ios|ipad)/ig),
+  // isMobile: !!navigator.userAgent.match(/(android|iphone|ipod|ios|ipad)/ig),
+  // isWin: navigator.platform == "Win32" || navigator.platform == "Windows",
+  // isMac: navigator.platform == "Mac68K" || navigator.platform == "MacPPC" || navigator.platform == "Macintosh" || navigator.platform == "MacIntel",
   // 生成随机整数
   rand: (max: number = 1) => {
     return Math.ceil(Math.random() * max)
@@ -591,7 +591,7 @@ class Tetris {
       this.restart()
     })
     CAPR.eventListener(CAPR.q(`#${this.domId} .tetris-setup`), 'click', () => {
-      alert('开发中...')
+      alert('Developing...')
     })
   }
 
@@ -651,34 +651,6 @@ class Tetris {
       }
     }
   }
-
-  // 清除移动后的方块位置
-  // clearData () {
-  //   let i: number, j: number, x: number, y: number, cur: any = this.currSquare
-  //   x = cur.origin.x
-  //   y = cur.origin.y
-  //   for (i = 0; i < cur.data.length; i++) {
-  //     for (j = 0; j < cur.data[0].length; j++) {
-  //       if (this._checkPoint(cur.origin, i, j)) {
-  //         this.stageArray[x + i][y + j] = 0
-  //       }
-  //     }
-  //   }
-  // }
-
-  // 设置移动后方块位置
-  // setData () {
-  //   let i: number, j: number, x: number, y: number, cur: any = this.currSquare
-  //   x = cur.origin.x
-  //   y = cur.origin.y
-  //   for (i = 0; i < cur.data.length; i++) {
-  //     for (j = 0; j < cur.data[0].length; j++) {
-  //       if (this._checkPoint(cur.origin, i, j)) {
-  //         this.stageArray[x + i][y + j] = cur.data[i][j]
-  //       }
-  //     }
-  //   }
-  // }
 
   // 旋转方块
   rotate () {
@@ -816,28 +788,6 @@ class Tetris {
   // 创建方块(组)
   make (index: number = 1, dir: number) {
     let s: Square = new Square(index)
-    // switch (index) {
-    //   case 1:
-    //     s = new Square1()
-    //     break
-    //   case 2:
-    //     s = new Square2()
-    //     break
-    //   case 3:
-    //     s = new Square3()
-    //     break
-    //   case 4:
-    //     s = new Square4()
-    //     break
-    //   case 5:
-    //     s = new Square5()
-    //     break
-    //   case 6:
-    //     s = new Square6()
-    //     break
-    //   default:
-    //     s = new Square7()
-    // }
     s.origin.x = 0
     s.origin.y = 3
     s.rotate(dir)
