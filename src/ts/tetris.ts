@@ -1044,6 +1044,8 @@ class Tetris {
         this.move()
       }, this.INTERVAL)
 
+      // 游戏计时
+      this.gameTimeMeter()
       // IE浏览器移除底部控制按钮
       if (CAPR.isIEBrower && CAPR.ieBrowerVersion() < 10) {
         let body: any = CAPR.q('body')
