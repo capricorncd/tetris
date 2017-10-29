@@ -1,11 +1,12 @@
 /**
  * Create by Capricorncd
  * Sat Oct 21 2017 18:49:07 GMT+0800
+ * https://github.com/capricorncd
  */
 
 /**
  * ***************************************************
- * CAPR
+ * CAPRICORNCD
  * ***************************************************
  */
 const CAPR: any = {
@@ -74,7 +75,7 @@ const CAPR: any = {
   // 格式化时间
   // formatTime
   ft: (sec: number) => {
-    var str = CAPR.fd(Math.floor(sec/60)) + ':' + CAPR.fd(sec % 60)
+    let str = CAPR.fd(Math.floor(sec/60)) + ':' + CAPR.fd(sec % 60)
     if (sec > 3600) {
       return CAPR.fd(Math.floor(sec/3600)) + ':' + str
     } else {
@@ -89,34 +90,35 @@ const CAPR: any = {
 
   // 检查移动的点，在舞台上是否合法
   checkPoint: (pos: any, x: number, y: number, data: any) => {
-    // return (
-    //   pos.x + x < 0
-    //   || pos.x + x >= data.length
-    //   || pos.y + y < 0
-    //   || pos.y + y >= data[0].length
-    //   || data[pos.x + x][pos.y + y] === 1
-    // ) ? false : true
-    if (pos.x + x < 0) {
-      return false
-    } else if (pos.x + x >= data.length) {
-      return false
-    } else if (pos.y + y < 0) {
-      return false
-    } else if (pos.y + y >= data[0].length) {
-      return false
-    } else if (data[pos.x + x][pos.y + y] === 1) {
-      return false
-    }
-    return true
+    return (
+      pos.x + x < 0
+      || pos.x + x >= data.length
+      || pos.y + y < 0
+      || pos.y + y >= data[0].length
+      || data[pos.x + x][pos.y + y] === 1
+    ) ? false : true
+    // if (pos.x + x < 0) {
+    //   return false
+    // } else if (pos.x + x >= data.length) {
+    //   return false
+    // } else if (pos.y + y < 0) {
+    //   return false
+    // } else if (pos.y + y >= data[0].length) {
+    //   return false
+    // } else if (data[pos.x + x][pos.y + y] === 1) {
+    //   return false
+    // }
+    // return true
   }
 }
 
 /**
  * ***************************************************
- * Squate
+ * Square 英[skweə(r)] 美[skwer]
  * ***************************************************
  */
 class Square {
+
   // 方块矩阵
   data: any = [
     [0, 0, 0, 0],
@@ -275,13 +277,13 @@ class Square {
     y: 0
   }
   // 随机方向
-  // direction 英 [dəˈrekʃn] 美 [dɪˈrɛkʃən, daɪ-]
+  // direction 英[dəˈrekʃn] 美[dɪˈrɛkʃən, daɪ-]
   dir: number = 0
-  // 方块索引 index
-  // index: number
   // 当前方块
   rotates: any
-  constructor (index: number = 1) {
+
+  // constructor
+  constructor (index: number = 0) {
     this.rotates = this.SQUARES[index]
   }
 
@@ -599,7 +601,7 @@ class Tetris {
   initDiv (container: any, data: any, divs: any) {
     const ieVer: number = CAPR.ieBrowerVersion()
     for (let i = 0; i < data.length; i++) {
-      var arr = []
+      let arr = []
       for (let j = 0; j < data[0].length; j++) {
         let newNode = document.createElement('div')
         newNode.className = 'none'

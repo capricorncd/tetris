@@ -5,19 +5,12 @@ var stylus = require('gulp-stylus')
 var cssBase64 = require('gulp-css-base64');
 var uglify = require('gulp-uglify')
 var watch = require('gulp-watch')
+var rename = require('gulp-rename')
+var argv = require('yargs').argv
+// Development
+var isDev = argv.dev == 1 ? true : false
 
-// var browserify = require("browserify");
-// var source = require('vinyl-source-stream');
-// var tsify = require("tsify");
-// var paths = {
-//   pages: ['./src/*.html']
-// }
-
-// gulp.task("copyHtml", function () {
-//   return gulp.src(paths.pages)
-//     .pipe(gulp.dest("dist"));
-// });
-
+// ts convert to js
 gulp.task('tsHandle', function () {
   return gulp.src([
     // './src/ts/util.ts',
@@ -28,22 +21,18 @@ gulp.task('tsHandle', function () {
       noImplicitAny: true,
       outFile: 'tetris.js'
     }))
-    .pipe(uglify())
     .pipe(gulp.dest('./dist/js'))
-  // return browserify({
-  //   basedir: '.',
-  //   debug: true,
-  //   entries: ['src/ts/tetris.ts'],
-  //   cache: {},
-  //   packageCache: {}
-  // })
-  //   .plugin(tsify)
-  //   .bundle()
-  //   .pipe(source('bundle.js'))
-  //   .pipe(gulp.dest("dist/js"))
 })
 
-// pc版
+// JavaScript Uglify
+gulp.task('uglify', ['tsHandle'], function () {
+  return gulp.src('./dist/js/tetris.js')
+    .pipe(rename('tetris.min.js'))
+    .pipe(uglify())
+    .pipe(gulp.dest('./dist/js'))
+})
+
+// Stylus Handle
 gulp.task('stylusHandle', function () {
   return gulp.src([
     './src/stylus/tetris.styl'
@@ -51,15 +40,19 @@ gulp.task('stylusHandle', function () {
     .pipe(cssBase64())
     // .pipe(concat('tetris.styl'))
     .pipe(stylus({
-      compress: true
+      // compress: true
     }))
     .pipe(gulp.dest('./dist/css'))
 })
-
 
 gulp.task('watch', function () {
   gulp.watch('./src/ts/*.ts', ['tsHandle'])
   gulp.watch('./src/stylus/*.styl', ['stylusHandle'])
 })
 
-gulp.task('default', ['tsHandle', 'stylusHandle', 'watch'])
+if (isDev) {
+  gulp.task('default', ['tsHandle', 'stylusHandle', 'watch'])
+} else {
+  gulp.task('default', ['uglify', 'stylusHandle'])
+}
+
