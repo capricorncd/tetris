@@ -2,9 +2,6 @@
 
 > This Tetris is developing
 
-> 浏览器版本 ie8+, chrome, firefox ...
-
-
 ## 游戏截图
 
 ![Tetris 俄罗斯方块](src/img/preview.jpg)
@@ -22,8 +19,7 @@
   <meta charset="UTF-8">
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Tetris - 俄罗斯方块单机版 - Capricorncd</title>
-  <link rel="stylesheet" href="../dist/css/tetris.css" type="text/css">
+  <title>Tetris - 俄罗斯方块单机版 - zx1984</title>
   <style>
     body {background-color: #333;}
     .game-box { float: left; margin-right: 10px; padding: 10px; width: 320px; height: 540px; border: 1px solid #999}
@@ -33,7 +29,7 @@
 
 <div class="game-box" id="TetrisA"></div>
 
-<script src="../dist/js/tetris.js"></script>
+<script src="./tetris.min.js"></script>
 <script>
   new Tetris({
     // 可选参数，默认为body
@@ -65,7 +61,7 @@
 
 * 自定义主题（方块颜色、舞台颜色等等）
 
-* ... 
+* ...
 
 UI方面暂时没有想到合适的方案，待续 ...
 
