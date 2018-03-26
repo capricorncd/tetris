@@ -41,7 +41,7 @@ module.exports = merge(base, {
   plugins: [],
   output: {
     path: path.resolve('dist'),
-    // 生成模式自动压缩代码，无需配置
+    // 生产模式自动压缩代码，无需配置
     filename: 'tetris.min.js',
     libraryTarget: 'umd'
   }
