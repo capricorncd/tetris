@@ -94,7 +94,7 @@ class Tetris {
   // 创建游戏DOM
   createGameDom (callback: any) {
     this.dom = document.createElement('div')
-    this.dom.className = 'capricorncd-tetris-container'
+    this.dom.className = 'zx-tetris-container'
     this.dom.id = this.domId
     this.dom.innerHTML = `
       <div class="tetris-stage"></div>
@@ -537,7 +537,7 @@ class Tetris {
       this.move()
     }, this.INTERVAL)
     util.q(`#${this.domId} .tetris-pause`).innerText = 'Pause'
-    util.q(`#${this.domId}`).className = 'capricorncd-tetris-container'
+    util.q(`#${this.domId}`).className = 'zx-tetris-container'
   }
 
   // gameOver
@@ -547,7 +547,7 @@ class Tetris {
       clearInterval(this.moveTimer)
       this.moveTimer = null
     }
-    util.q(`#${this.domId}`).className = 'capricorncd-tetris-container game-over'
+    util.q(`#${this.domId}`).className = 'zx-tetris-container game-over'
   }
 
   // 游戏进行时间，单位秒
