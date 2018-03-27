@@ -1,6 +1,6 @@
 # Tetris Game / 俄罗斯方块
 
-> This Tetris is developing
+> Tetris Game
 
 ## 游戏截图
 
@@ -49,29 +49,8 @@
 
 ```
 
-## 待开发功能
-
-* 游戏难易程度选项
-
-* PC操作自定义方向键
-
-* 游戏声音
-
-* 排行榜记录
-
-* 自定义主题（方块颜色、舞台颜色等等）
-
-* ...
-
-UI方面暂时没有想到合适的方案，待续 ...
-
-## 最后
-
-记得点【★Star】，走过路过千万不要错过，Thanks！
-
 ## Copyright and license
 
 https://github.com/zx1984
 
 Code and documentation copyright 2018. zx1984. Code released under the MIT License.
-
