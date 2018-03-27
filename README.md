@@ -68,3 +68,10 @@ UI方面暂时没有想到合适的方案，待续 ...
 ## 最后
 
 记得点【★Star】，走过路过千万不要错过，Thanks！
+
+## Copyright and license
+
+https://github.com/zx1984
+
+Code and documentation copyright 2018. zx1984. Code released under the MIT License.
+
