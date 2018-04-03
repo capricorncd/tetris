@@ -40,6 +40,7 @@ module.exports = merge(base, {
   // 对 webpack-dev-server 进行配置
   devServer: {
     contentBase: './dist',
+    host: '0.0.0.0',
     // 设置localhost端口
     port: 9000,
     // 自动打开浏览器

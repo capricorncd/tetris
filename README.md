@@ -2,6 +2,14 @@
 
 > Tetris Game
 
+## Start
+
+```bash
+npm run dev
+```
+
+http://localhost:9000
+
 ## 游戏截图
 
 ![Tetris 俄罗斯方块](src/img/preview.jpg)
