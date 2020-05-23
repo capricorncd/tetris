@@ -1,7 +1,7 @@
 /**
- * Create by zx1984
+ * Create by Capricorncd
  * Sat Oct 21 2017 18:49:07 GMT+0800
- * https://github.com/zx1984
+ * https://github.com/capricorncd
  */
 import util from './util'
 /**

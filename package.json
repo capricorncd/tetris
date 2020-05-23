@@ -1,7 +1,7 @@
 {
   "name": "Tetris",
   "version": "1.0.1",
-  "author": "zx1984",
+  "author": "Capricorncd",
   "scripts": {
     "dev": "webpack-dev-server --mode=development --client-log-level none --color --inline --hot --config webpack.dev.js",
     "build": "webpack --mode=production --config webpack.prod.js --color"
@@ -30,9 +30,9 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/zx1984/tetris.git"
+    "url": "git+https://github.com/capricorncd/tetris.git"
   },
-  "homepage": "https://github.com/zx1984/tetris",
+  "homepage": "https://github.com/capricorncd/tetris",
   "keywords": [
     "Tetris",
     "game",
