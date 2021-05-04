@@ -5,7 +5,8 @@
  */
 import util from './util'
 import Square from './square'
-import '../stylus/tetris.styl'
+import * as Types from '../types'
+import './scss/style.scss'
 
 /**
  * ***************************************************
@@ -13,31 +14,38 @@ import '../stylus/tetris.styl'
  * ***************************************************
  */
 // 消息码及提示
-const CODES: any = {
+const CODES: Record<string, string> = {
   0: 'Tetris readied',
   1: '浏览器版本过低，请升级浏览器',
   2: '创建Tetris DOM失败，请升级浏览器或引入jQuery/Zepte库'
 }
 
-// Tetris
-class Tetris {
+// 默认配置参数
+const DEF_OPTIONS: Types.Options = {
+  // 游戏容器，默认为body
+  container: 'body',
+  /* eslint-disable @typescript-eslint/no-empty-function */
+  ready: () => {},
+  error: () => {}
+}
 
+class Tetris {
   // 方块下落时间间隔
-  INTERVAL: number = 500
+  private INTERVAL = 500
   // 下落速度定时器
-  moveTimer: any
+  private moveTimer: number | null = null
   // 游戏定时器
-  gameTimer: any
+  private gameTimer: number | null = null
   // 游戏时间，单位秒
-  gameTimes: number = 0
+  private gameTimes = 0
   // 游戏是否结束
-  isGameOver: boolean = false
+  private isGameOver = false
   // 是否暂停
-  isPause: boolean = false
+  private isPause = false
   // 游戏计分
-  gameScores: number = 0
+  private gameScores = 0
   // 游戏舞台二维矩阵
-  stageArray: any = [
+  private stageArray: Types.NumberArray[] = [
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
     [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
@@ -61,38 +69,35 @@ class Tetris {
   ]
 
   // 当前方块 currentSquare
-  currSquare: any
+  private currSquare: Square | null = null
   // 下一个方块
-  nextSquare: any
+  private nextSquare: Square | null = null
   // 舞台方块数据divs
-  stageDivs: any = []
+  private stageDivs: any = []
   // 下一个方块组数据
-  nextDivs: any = []
-
-  // 默认配置参数
-  opts: any = {
-    // 游戏容器，默认为body
-    container: 'body',
-    ready: () => {},
-    error: () => {}
-  }
+  private nextDivs: any = []
 
   // 游戏外部DOM容器(父容器)
-  outerDom: any = null
+  private outerDom: HTMLElement | null = null
   // 游戏容器
-  dom: any = null
+  private dom: HTMLElement | null = null
   // DOM id
-  domId: string = `Tetris_${new Date().getTime()}`
+  private domId = `Tetris_${new Date().getTime()}`
+
+  private opts: Types.Options
 
   // constructor
-  constructor (opts: any) {
-    this.opts = util.extend(opts, this.opts)
+  constructor (opts: Types.Options) {
+    this.opts = {
+      ...DEF_OPTIONS,
+      ...opts
+    }
     this.outerDom = util.q(this.opts.container)
     this.init()
   }
 
   // 创建游戏DOM
-  createGameDom (callback: any) {
+  createGameDom (): void {
     this.dom = document.createElement('div')
     this.dom.className = 'zx-tetris-container'
     this.dom.id = this.domId
@@ -146,19 +151,17 @@ class Tetris {
     if (this.outerDom) {
       this.outerDom.innerHTML = ''
       this.outerDom.appendChild(this.dom)
-      this.opts.ready({code: 0, msg: `${CODES[0]} in '${this.opts.container}'`})
-      callback()
+      this.opts.ready({ code: 0, msg: `${CODES[0]} in '${this.opts.container}'` })
     } else {
-      this.opts.error({code: 2, msg: CODES[2]})
+      this.opts.error({ code: 2, msg: CODES[2] })
     }
   }
 
   // 游戏控制
-  gameController () {
+  gameController (): void {
     // 绑定键盘事件
-    util.eventListener(document, 'keydown', (e: any) => {
-      e = e || event
-      let code: number = e.keyCode
+    util.eventListener(document, 'keydown', (e: KeyboardEvent) => {
+      const code: number = e.keyCode
       // pause
       if (code === 13) {
         if (this.isGameOver) return
@@ -229,12 +232,12 @@ class Tetris {
   }
 
   // 初始化Div
-  initDiv (container: any, data: any, divs: any) {
+  initDiv (container: HTMLElement, data: Types.NumberArray[], divs: HTMLElement[][]): void {
     const ieVer: number = util.ieBrowerVersion()
     for (let i = 0; i < data.length; i++) {
-      let arr = []
+      const arr: HTMLElement[] = []
       for (let j = 0; j < data[0].length; j++) {
-        let newNode = document.createElement('div')
+        const newNode = document.createElement('div')
         newNode.className = 'none'
         if (util.isIEBrower && ieVer <= 9) {
           newNode.style.top = (i * 20) + 'px'
@@ -250,8 +253,8 @@ class Tetris {
   }
 
   // 刷新div
-  refreshDiv (data: any = this.stageArray, divs: any = this.stageDivs) {
-    for (let i: number = 0; i < data.length; i++) {
+  refreshDiv (data: Types.NumberArray[] = this.stageArray, divs: HTMLElement[][] = this.stageDivs): void {
+    for (let i = 0; i < data.length; i++) {
       for (let j = 0; j < data[0].length; j++) {
         if (data[i][j] === 0) {
           divs[i][j].className = 'none'
@@ -265,20 +268,21 @@ class Tetris {
   }
 
   // 重置方块位置
-  resetPos (type: string = 'set') {
-    let i: number, j: number, x: number, y: number
-    x = this.currSquare.origin.x
-    y = this.currSquare.origin.y
-    for (i = 0; i < this.currSquare.data.length; i++) {
-      for (j = 0; j < this.currSquare.data[0].length; j++) {
-        if (util.checkPoint(this.currSquare.origin, i, j, this.stageArray)) {
+  resetPos (type = 'set'): void {
+    const currSquare = this.currSquare as Square
+    let i: number, j: number
+    const x = currSquare.origin.x
+    const y = currSquare.origin.y
+    for (i = 0; i < currSquare.data.length; i++) {
+      for (j = 0; j < currSquare.data[0].length; j++) {
+        if (util.checkPoint(currSquare.origin, i, j, this.stageArray)) {
           // 清除移动后的方块位置
-          if ('clear' === type) {
+          if (type === 'clear') {
             this.stageArray[x + i][y + j] = 0
           }
           // 设置移动后方块位置
-          else if ('set' === type) {
-            this.stageArray[x + i][y + j] = this.currSquare.data[i][j]
+          else if (type === 'set') {
+            this.stageArray[x + i][y + j] = currSquare.data[i][j]
           }
         }
       }
@@ -286,64 +290,69 @@ class Tetris {
   }
 
   // 旋转方块
-  rotate () {
-    if (this.currSquare.canRotate(this.stageArray)) {
+  rotate (): void {
+    const currSquare = this.currSquare as Square
+    if (currSquare.canRotate(this.stageArray)) {
       this.resetPos('clear')
-      this.currSquare.rotate()
+      currSquare.rotate()
       this.resetPos('set')
       this.refreshDiv()
     }
   }
 
   // 左移方块
-  left () {
-    if (this.currSquare.canLeft(this.stageArray)) {
+  left (): void {
+    const currSquare = this.currSquare as Square
+    if (currSquare.canLeft(this.stageArray)) {
       this.resetPos('clear')
-      this.currSquare.left()
+      currSquare.left()
       this.resetPos('set')
       this.refreshDiv()
     }
   }
 
   // 右移方块
-  right () {
-    if (this.currSquare.canRight(this.stageArray)) {
+  right (): void {
+    const currSquare = this.currSquare as Square
+    if (currSquare.canRight(this.stageArray)) {
       this.resetPos('clear')
-      this.currSquare.right()
+      currSquare.right()
       this.resetPos('set')
       this.refreshDiv()
     }
   }
 
   // 下移方块
-  down () {
+  down (): boolean {
+    const currSquare = this.currSquare as Square
     // 判断是否能继续下降
-    if (this.currSquare.canDown(this.stageArray)) {
+    if (currSquare.canDown(this.stageArray)) {
       this.resetPos('clear')
-      this.currSquare.down()
+      currSquare.down()
       this.resetPos('set')
       this.refreshDiv()
       return true
-    } else {
-      return false
     }
+    return false
   }
 
   // 落下方块
-  fall () {
+  fall (): void {
+    /* eslint-disable no-empty */
     while (this.down()) {}
   }
 
   // 方块移动到底部，固定方块
-  fixed () {
+  fixed (): void {
+    const currSquare = this.currSquare as Square
     let i: number, j: number
-    let data = this.currSquare.data
+    const data = currSquare.data
     // console.log(data)
     for (i = 0; i < data.length; i++) {
       for (j = 0; j < data[0].length; j++) {
-        if (util.checkPoint(this.currSquare.origin, i, j, this.stageArray)) {
-          if (this.stageArray[this.currSquare.origin.x + i][this.currSquare.origin.y + j] == 2) {
-            this.stageArray[this.currSquare.origin.x + i][this.currSquare.origin.y + j] = 1
+        if (util.checkPoint(currSquare.origin, i, j, this.stageArray)) {
+          if (this.stageArray[currSquare.origin.x + i][currSquare.origin.y + j] === 2) {
+            this.stageArray[currSquare.origin.x + i][currSquare.origin.y + j] = 1
           }
         }
       }
@@ -352,19 +361,17 @@ class Tetris {
   }
 
   // 检查游戏结束
-  checkGameOver () {
-    let isOver: boolean = false
+  checkGameOver (): boolean {
     for (let i = 0; i < this.stageArray[0].length; i++) {
-      if (this.stageArray[0][i] == 1) {
-        isOver = true
-        break
+      if (this.stageArray[0][i] === 1) {
+        return true
       }
     }
-    return isOver
+    return false
   }
 
   // 使用下一个方块
-  performNext (type: number, dir: number) {
+  performNext (type: number, dir: number): void {
     this.currSquare = this.nextSquare
     this.resetPos('set')
     this.nextSquare = this.make(type, dir)
@@ -373,12 +380,17 @@ class Tetris {
   }
 
   // 清除填满方块的整行
-  checkClear () {
-    let i: number, j: number, m: number, n: number, line: number = 0, len: number = this.stageArray.length
+  checkClear (): number {
+    let i: number
+    let j: number
+    let m: number
+    let n: number
+    let line = 0
+    const len: number = this.stageArray.length
     for (i = len - 1; i >= 0; i--) {
-      let isClear: boolean = true
+      let isClear = true
       for (j = 0; j < this.stageArray[0].length; j++) {
-        if (this.stageArray[i][j] != 1) {
+        if (this.stageArray[i][j] !== 1) {
           isClear = false
           break
         }
@@ -388,7 +400,7 @@ class Tetris {
         // 整体下移
         for (m = i; m > 0; m--) {
           for (n = 0; n < this.stageArray[0].length; n++) {
-            this.stageArray[m][n] = this.stageArray[m-1][n]
+            this.stageArray[m][n] = this.stageArray[m - 1][n]
           }
         }
         for (n = 0; n < this.stageArray[0].length; n++) {
@@ -401,26 +413,27 @@ class Tetris {
   }
 
   // 底部增加行
-  addTailLines (lines: any) {
-    let i: number, j: number
-    let alen: number = this.stageArray.length
-    let llen: number = lines.length
-    for (i = 0; i < alen - llen; i++) {
-      this.stageArray[i] = this.stageArray[i + llen]
-    }
-    for (j = 0; j < llen; j++) {
-      this.stageArray[alen - llen + j] = lines[j]
-    }
-    this.currSquare.origin.x -= llen
-    if (this.currSquare.origin.x < 0) {
-      this.currSquare.origin.x = 0
-    }
-    this.refreshDiv()
-  }
+  // addTailLines (lines: number[]): void {
+  //   const currSquare = this.currSquare as Square
+  //   let i: number, j: number
+  //   const aLen = this.stageArray.length
+  //   const lLen = lines.length
+  //   for (i = 0; i < aLen - lLen; i++) {
+  //     this.stageArray[i] = this.stageArray[i + lLen]
+  //   }
+  //   for (j = 0; j < lLen; j++) {
+  //     this.stageArray[aLen - lLen + j] = lines
+  //   }
+  //   currSquare.origin.x -= lLen
+  //   if (currSquare.origin.x < 0) {
+  //     currSquare.origin.x = 0
+  //   }
+  //   this.refreshDiv()
+  // }
 
   // 创建方块(组)
-  make (index: number = 1, dir: number) {
-    let s: Square = new Square(index)
+  make (index = 1, dir: number): Square {
+    const s: Square = new Square(index)
     s.origin.x = 0
     s.origin.y = 3
     s.rotate(dir)
@@ -433,10 +446,10 @@ class Tetris {
    * *******************************************************
    */
   // 下落
-  move () {
+  move (): void {
     if (!this.down()) {
       this.fixed()
-      let line: number = this.checkClear()
+      const line: number = this.checkClear()
       this.addScore(line)
       if (this.checkGameOver()) {
         this.stop()
@@ -446,39 +459,12 @@ class Tetris {
     }
   }
 
-  // 开始游戏
-  // start () {
-  //   if (this.isGameOver) {
-  //     return
-  //   }
-  //   if (this.moveTimer) {
-  //     clearInterval(this.moveTimer)
-  //     this.moveTimer = null
-  //   }
-  //   if (this.gameTimer) {
-  //     clearInterval(this.gameTimer)
-  //     this.gameTimer = null
-  //   }
-  //   this.isPause = false
-  //   // 游戏计时
-  //   this.gameTimeMeter(0)
-  //   this.INTERVAL = 500
-  //   this.gameTimes = 0
-  //   this.gameScores = 0
-  //
-  //   // 下一个方块
-  //   this.performNext(util.rand(7), util.rand(4))
-  //   this.moveTimer = setInterval(() => {
-  //     this.move()
-  //   }, this.INTERVAL)
-  //   util.q(`#${this.domId} .tetris-pause`).innerText = 'Pause'
-  // }
-
   // 暂停游戏
-  pause () {
+  pause (): void {
     if (this.isGameOver) return
     if (this.isPause) {
       this.isPause = false
+      // @ts-ignore
       this.moveTimer = setInterval(() => {
         this.move()
       }, this.INTERVAL)
@@ -501,8 +487,7 @@ class Tetris {
   }
 
   // 重新开始游戏
-  restart () {
-
+  restart (): void {
     if (this.moveTimer) {
       clearInterval(this.moveTimer)
       this.moveTimer = null
@@ -533,6 +518,7 @@ class Tetris {
 
     // 下一个方块
     this.performNext(util.rand(7), util.rand(4))
+    // @ts-ignore
     this.moveTimer = setInterval(() => {
       this.move()
     }, this.INTERVAL)
@@ -541,7 +527,7 @@ class Tetris {
   }
 
   // gameOver
-  stop () {
+  stop (): void {
     this.isGameOver = true
     if (this.moveTimer) {
       clearInterval(this.moveTimer)
@@ -551,12 +537,14 @@ class Tetris {
   }
 
   // 游戏进行时间，单位秒
-  gameTimeMeter () {
+  gameTimeMeter (): void {
+    // @ts-ignore
     this.gameTimer = setInterval(() => {
       this.gameTimes++
       util.q(`#${this.domId} .times`).innerText = util.ft(this.gameTimes)
-      if (this.isGameOver) {
+      if (this.isGameOver && this.gameTimer) {
         clearInterval(this.gameTimer)
+        this.gameTimer = null
       }
       // 生成干扰行
       // if (this.gameTimes % 10 === 0) {
@@ -566,7 +554,7 @@ class Tetris {
   }
 
   // 游戏分数统计
-  addScore (line: number) {
+  addScore (line: number): void {
     let s = 0
     switch (line) {
       case 1:
@@ -583,16 +571,16 @@ class Tetris {
         break
     }
     this.gameScores += s
-    util.q(`#${this.domId} .score`).innerText = this.gameScores
+    util.q(`#${this.domId} .score`).innerText = this.gameScores + ''
     // 下落时间间隔
     this.setDownInterval(this.gameScores)
   }
 
   // 设置下落时间间隔/速度控制
-  setDownInterval (score: number) {
+  setDownInterval (score: number): void {
     if (score > 4000) {
       this.INTERVAL = 100
-    }  else if (score > 3500) {
+    } else if (score > 3500) {
       this.INTERVAL = 150
     } else if (score > 3000) {
       this.INTERVAL = 200
@@ -609,37 +597,35 @@ class Tetris {
     }
   }
 
-
   // 初始化游戏
-  init () {
+  init (): void {
     // 创建游戏DOM
-    this.createGameDom(() => {
-      this.nextSquare = this.make(util.rand(7), util.rand(4))
-      // 初始化舞台方块
-      this.initDiv(util.q(`#${this.domId} .tetris-stage`), this.stageArray, this.stageDivs)
-      this.initDiv(util.q(`#${this.domId} .next-square`), this.nextSquare.data, this.nextDivs)
-      this.refreshDiv(this.nextSquare.data, this.nextDivs)
-      this.gameController()
+    this.createGameDom()
+    this.nextSquare = this.make(util.rand(7), util.rand(4))
+    // 初始化舞台方块
+    this.initDiv(util.q(`#${this.domId} .tetris-stage`), this.stageArray, this.stageDivs)
+    this.initDiv(util.q(`#${this.domId} .next-square`), this.nextSquare.data, this.nextDivs)
+    this.refreshDiv(this.nextSquare.data, this.nextDivs)
+    this.gameController()
 
-      // 下一个方块
-      this.performNext(util.rand(7), util.rand(4))
-      this.moveTimer = setInterval(() => {
-        this.move()
-      }, this.INTERVAL)
+    // 下一个方块
+    this.performNext(util.rand(7), util.rand(4))
+    // @ts-ignore
+    this.moveTimer = setInterval(() => {
+      this.move()
+    }, this.INTERVAL)
 
-      // 游戏计时
-      this.gameTimeMeter()
-      // IE浏览器移除底部控制按钮
-      if (util.isIEBrower && util.ieBrowerVersion() < 10) {
-        let body: any = util.q('body')
-        let bodyClassName: string = body.className || ''
-        if (bodyClassName.indexOf('ie-brower') === -1) {
-          body.className = 'ie-brower ' + bodyClassName
-        }
+    // 游戏计时
+    this.gameTimeMeter()
+    // IE浏览器移除底部控制按钮
+    if (util.isIEBrower && util.ieBrowerVersion() < 10) {
+      const body: any = util.q('body')
+      const bodyClassName: string = body.className || ''
+      if (bodyClassName.indexOf('ie-brower') === -1) {
+        body.className = 'ie-brower ' + bodyClassName
       }
-    })
+    }
   }
-
 }
 
 export {

@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,user-scalable=no">
+  <title>Tetris - 俄罗斯方块单机版 - Capricorncd</title>
+  <meta name="author" content="https://github.com/capricorncd">
+  <meta name="keywords" content="tetris, dev3cli, capricorncd">
+  <meta name="description" content="tetris, dev3cli, capricorncd, https://github.com/capricorncd/dev3cli">
+  <meta name="github" content="https://github.com/capricorncd/dev3cli">
+  <style>body {background-color: #333;}</style>
+</head>
+<body>
+<div class="game-box" id="app"></div>
+<!--<div class="game-box" id="TetrisB"></div>-->
+
+<script src="./tetris.min.js"></script>
+<!--<script src="./tetris.js"></script>-->
+<script>
+  new Tetris({
+    container: '#app',
+    error: function (err) {
+      alert(err.msg)
+      console.error(err)
+    },
+    ready: function (res) {
+      console.log(res)
+    }
+  })
+
+  //  var tetrisB = new Tetris({
+  //    container: '#TetrisB',
+  //    error: function (err) {
+  //      alert(err.msg)
+  //      console.error(err)
+  //    },
+  //    ready: function (res) {
+  //      console.log(res)
+  //    }
+  //  })
+</script>
+</body>
+</html>

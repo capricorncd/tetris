@@ -4,15 +4,16 @@
  * https://github.com/capricorncd
  */
 import util from './util'
+import * as Types from '../types'
+
 /**
  * ***************************************************
  * Square 英[skweə(r)] 美[skwer]
  * ***************************************************
  */
 class Square {
-
   // 方块矩阵
-  data: any = [
+  data: Types.NumberArray[] = [
     [0, 0, 0, 0],
     [0, 0, 0, 0],
     [0, 0, 0, 0],
@@ -20,7 +21,7 @@ class Square {
   ]
 
   // 各种形状方块(组)
-  SQUARES: any = {
+  SQUARES: Record<string, Types.NumberArray[][]> = {
     // 方块01
     1: [
       [
@@ -164,26 +165,27 @@ class Square {
   }
 
   // 原点
-  origin: any = {
+  origin: Types.SquareOrigin = {
     x: 0,
     y: 0
   }
+
   // 随机方向
   // direction 英[dəˈrekʃn] 美[dɪˈrɛkʃən, daɪ-]
-  dir: number = 0
+  dir = 0
   // 当前方块
-  rotates: any
+  rotates: Types.NumberArray[][]
 
   // constructor
-  constructor (index: number = 0) {
+  constructor (index = 0) {
     this.rotates = this.SQUARES[index]
   }
 
   // 检查数据是否合法
-  isValid (pos: any, data: any, stageArray: any) {
+  isValid (pos: Types.SquareOrigin, data: Types.NumberArray[], stageArray: Types.NumberArray[]): boolean {
     for (let i = 0; i < data.length; i++) {
       for (let j = 0; j < data[0].length; j++) {
-        if (data[i][j] != 0) {
+        if (data[i][j] !== 0) {
           if (!util.checkPoint(pos, i, j, stageArray)) {
             return false
           }
@@ -194,10 +196,10 @@ class Square {
   }
 
   // 是否能旋转
-  canRotate (stageArray: any) {
-    let len: number = this.rotates.length
-    let index: number = (this.dir + 1) % len
-    let test: any = [
+  canRotate (stageArray: Types.NumberArray[]): boolean {
+    const len: number = this.rotates.length
+    const index: number = (this.dir + 1) % len
+    const test: Types.NumberArray[] = [
       [0, 0, 0, 0],
       [0, 0, 0, 0],
       [0, 0, 0, 0],
@@ -211,7 +213,7 @@ class Square {
     return this.isValid(this.origin, test, stageArray)
   }
 
-  rotate (num: number = 1) {
+  rotate (num = 1): void {
     let i: number, j: number
     this.dir = (this.dir + num) % this.rotates.length
     for (i = 0; i < this.data.length; i++) {
@@ -222,50 +224,52 @@ class Square {
   }
 
   // 是否能下降
-  canDown (stageArray: any) {
-    let test: any = {}
+  canDown (stageArray: Types.NumberArray[]): boolean {
+    const test: any = {}
     test.x = this.origin.x + 1
     test.y = this.origin.y
     return this.isValid(test, this.data, stageArray)
   }
 
-  down () {
+  down (): void {
     this.origin.x += 1
   }
 
   // 是否能左移
-  canLeft (stageArray: any) {
-    let test: any = {}
+  canLeft (stageArray: Types.NumberArray[]): boolean {
+    const test: any = {}
     test.x = this.origin.x
     test.y = this.origin.y - 1
     return this.isValid(test, this.data, stageArray)
   }
-  left () {
+
+  left (): void {
     this.origin.y -= 1
   }
 
   // 是否能右移
-  canRight (stageArray: any) {
-    let test: any = {}
+  canRight (stageArray: Types.NumberArray[]): boolean {
+    const test: any = {}
     test.x = this.origin.x
     test.y = this.origin.y + 1
     return this.isValid(test, this.data, stageArray)
   }
-  right () {
+
+  right (): void {
     this.origin.y += 1
   }
 
   // 是否能上移
-  canUp (stageArray: any) {
-    let test: any = {}
+  canUp (stageArray: Types.NumberArray[]): boolean {
+    const test: any = {}
     test.x = this.origin.x - 1
     test.y = this.origin.y
     return this.isValid(test, this.data, stageArray)
   }
-  up () {
+
+  up (): void {
     this.origin.x -= 1
   }
-
 }
 
 export default Square

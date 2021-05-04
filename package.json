@@ -1,43 +1,53 @@
 {
-  "name": "Tetris",
-  "version": "1.0.1",
+  "name": "tetris",
+  "version": "0.1.0",
+  "description": "tetris",
+  "license": "MIT",
   "author": "Capricorncd",
   "scripts": {
-    "dev": "webpack-dev-server --mode=development --client-log-level none --color --inline --hot --config webpack.dev.js",
-    "build": "webpack --mode=production --config webpack.prod.js --color"
+    "dev": "webpack serve",
+    "build": "webpack --mode production"
   },
-  "dependencies": {
-    "webpack": "^4.2.0",
-    "webpack-cli": "^2.0.13"
-  },
-  "devDependencies": {
-    "babel": "^6.23.0",
-    "babel-core": "^6.26.0",
-    "babel-loader": "^7.1.4",
-    "babel-polyfill": "^6.26.0",
-    "babel-preset-env": "^1.6.1",
-    "css-loader": "^0.28.11",
-    "style-loader": "^0.20.3",
-    "stylus": "^0.54.5",
-    "stylus-loader": "^3.0.2",
-    "ts-loader": "^4.1.0",
-    "typescript": "^2.7.2",
-    "typescript-loader": "^1.1.3",
-    "uglifyjs-webpack-plugin": "^1.2.4",
-    "url-loader": "^1.0.1",
-    "webpack-dev-server": "^3.1.1",
-    "webpack-merge": "^4.1.2"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/capricorncd/tetris.git"
-  },
-  "homepage": "https://github.com/capricorncd/tetris",
   "keywords": [
-    "Tetris",
-    "game",
-    "typescript"
+    "tetris",
+    "dev3li"
   ],
-  "main": "dist/tetris.min.js",
-  "license": "MIT"
+  "main": "./dist/index.js",
+  "devDependencies": {
+    "@babel/plugin-transform-typescript": "^7.13.0",
+    "@babel/preset-typescript": "^7.13.0",
+    "@types/html-webpack-plugin": "^3.2.5",
+    "@types/jest": "^26.0.23",
+    "@types/node": "^15.0.1",
+    "@types/react": "^17.0.4",
+    "@types/react-dom": "^17.0.3",
+    "@types/react-router-dom": "^5.1.7",
+    "@types/webpack": "^5.28.0",
+    "@types/webpack-dev-server": "^3.11.3",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
+    "clean-webpack-plugin": "^4.0.0-alpha.0",
+    "copy-webpack-plugin": "^8.1.1",
+    "css-loader": "^5.2.4",
+    "date-utils-2020": "^1.0.1",
+    "eslint": "^7.25.0",
+    "eslint-config-standard": "^16.0.2",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-node": "^11.1.0",
+    "eslint-plugin-promise": "^5.1.0",
+    "eslint-webpack-plugin": "^2.5.4",
+    "file-loader": "^6.2.0",
+    "html-webpack-plugin": "^5.3.1",
+    "sass": "^1.32.12",
+    "sass-loader": "^11.0.1",
+    "style-loader": "^2.0.0",
+    "style-resources-loader": "^1.4.1",
+    "ts-loader": "^9.1.1",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.2.4",
+    "webpack": "^5.36.2",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2",
+    "webpack-merge": "^5.7.3"
+  }
 }

@@ -1,9 +1,41 @@
 {
   "compilerOptions": {
-    "sourceMap": true,
+    "target": "ES5",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "lib": [
+      "ESNext",
+      "ESNext.AsyncIterable",
+      "DOM"
+    ],
+    "typeRoots": [
+      "./types",
+      "./src"
+    ],
+    "esModuleInterop": true,
+    "outDir": "./dist/",
+    "noImplicitAny": true,
+    "jsx": "react",
     "allowJs": true,
-    "module": "commonjs",
-    "removeComments": true,
-    "target": "es2017"
-  }
+    "sourceMap": true,
+    "strict": true,
+    "noEmit": false,
+    "experimentalDecorators": true,
+    "baseUrl": ".",
+    "paths": {
+      "~/*": [
+        "./*"
+      ],
+      "@/*": [
+        "./*"
+      ]
+    },
+    "types": [
+      "@types/node"
+    ]
+  },
+  "exclude": [
+    "node_modules",
+    "dist"
+  ]
 }
