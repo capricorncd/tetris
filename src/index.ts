@@ -6,6 +6,7 @@
 import util from './util'
 import Square from './square'
 import * as Types from '../types'
+import { CODES, DEF_OPTIONS, KEYBOARD_KEYS } from './constants'
 import './scss/style.scss'
 
 /**
@@ -13,22 +14,6 @@ import './scss/style.scss'
  * Tetris
  * ***************************************************
  */
-// 消息码及提示
-const CODES: Record<string, string> = {
-  0: 'Tetris readied',
-  1: '浏览器版本过低，请升级浏览器',
-  2: '创建Tetris DOM失败，请升级浏览器或引入jQuery/Zepte库'
-}
-
-// 默认配置参数
-const DEF_OPTIONS: Types.Options = {
-  // 游戏容器，默认为body
-  container: 'body',
-  /* eslint-disable @typescript-eslint/no-empty-function */
-  ready: () => {},
-  error: () => {}
-}
-
 class Tetris {
   // 方块下落时间间隔
   private INTERVAL = 500
@@ -114,7 +99,7 @@ class Tetris {
           </div>
         </div>
         <div class="control-wrapper">
-          <button class="tetris-setup">Setup</button>
+<!--          <button class="tetris-setup">Setup</button>-->
           <button class="tetris-restart">Restart</button>
           <button class="tetris-pause">Pause</button>
         </div>
@@ -161,14 +146,17 @@ class Tetris {
   gameController (): void {
     // 绑定键盘事件
     util.eventListener(document, 'keydown', (e: KeyboardEvent) => {
-      const code: number = e.keyCode
+      e.preventDefault()
+      const keyCode = e.keyCode
+      const key = e.key
       // pause
-      if (code === 13) {
+      if (key === KEYBOARD_KEYS.ENTER ?? keyCode === 13) {
         if (this.isGameOver) return
         this.pause()
       }
 
-      if (code === 16) {
+      // restart
+      if (key === KEYBOARD_KEYS.SHIFT ?? keyCode === 16) {
         this.restart()
       }
 
@@ -177,23 +165,23 @@ class Tetris {
         return
       }
       // up(rotate)旋转方块
-      if (code === 38) {
+      if (key === KEYBOARD_KEYS.ARROW_UP ?? keyCode === 38) {
         this.rotate()
       }
       // right
-      else if (code === 39) {
+      else if (key === KEYBOARD_KEYS.ARROW_RIGHT ?? keyCode === 39) {
         this.right()
       }
       // down
-      else if (code === 40) {
+      else if (key === KEYBOARD_KEYS.ARROW_DOWN ?? keyCode === 40) {
         this.down()
       }
       // left
-      else if (code === 37) {
+      else if (key === KEYBOARD_KEYS.ARROW_LEFT ?? keyCode === 37) {
         this.left()
       }
-      // space
-      else if (code === 32) {
+      // space(fall)
+      else if (key === KEYBOARD_KEYS.SPACE ?? keyCode === 32) {
         this.fall()
       }
     })
@@ -226,9 +214,9 @@ class Tetris {
     util.eventListener(util.q(`#${this.domId} .tetris-restart`), 'click', () => {
       this.restart()
     })
-    util.eventListener(util.q(`#${this.domId} .tetris-setup`), 'click', () => {
-      alert('Developing...')
-    })
+    // util.eventListener(util.q(`#${this.domId} .tetris-setup`), 'click', () => {
+    //   alert('Developing...')
+    // })
   }
 
   // 初始化Div
