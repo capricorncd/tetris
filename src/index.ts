@@ -150,13 +150,13 @@ class Tetris {
       const keyCode = e.keyCode
       const key = e.key
       // pause
-      if (key === KEYBOARD_KEYS.ENTER ?? keyCode === 13) {
+      if (key === KEYBOARD_KEYS.ENTER || keyCode === 13) {
         if (this.isGameOver) return
         this.pause()
       }
 
       // restart
-      if (key === KEYBOARD_KEYS.SHIFT ?? keyCode === 16) {
+      if (key === KEYBOARD_KEYS.SHIFT || keyCode === 16) {
         this.restart()
       }
 
@@ -165,23 +165,23 @@ class Tetris {
         return
       }
       // up(rotate)旋转方块
-      if (key === KEYBOARD_KEYS.ARROW_UP ?? keyCode === 38) {
+      if (key === KEYBOARD_KEYS.ARROW_UP || keyCode === 38) {
         this.rotate()
       }
       // right
-      else if (key === KEYBOARD_KEYS.ARROW_RIGHT ?? keyCode === 39) {
+      else if (key === KEYBOARD_KEYS.ARROW_RIGHT || keyCode === 39) {
         this.right()
       }
       // down
-      else if (key === KEYBOARD_KEYS.ARROW_DOWN ?? keyCode === 40) {
+      else if (key === KEYBOARD_KEYS.ARROW_DOWN || keyCode === 40) {
         this.down()
       }
       // left
-      else if (key === KEYBOARD_KEYS.ARROW_LEFT ?? keyCode === 37) {
+      else if (key === KEYBOARD_KEYS.ARROW_LEFT || keyCode === 37) {
         this.left()
       }
       // space(fall)
-      else if (key === KEYBOARD_KEYS.SPACE ?? keyCode === 32) {
+      else if (key === KEYBOARD_KEYS.SPACE || keyCode === 32) {
         this.fall()
       }
     })
@@ -546,16 +546,16 @@ class Tetris {
     let s = 0
     switch (line) {
       case 1:
-        s = 10
+        s = 100
         break
       case 2:
-        s = 30
+        s = 300
         break
       case 3:
-        s = 60
+        s = 600
         break
       case 4:
-        s = 100
+        s = 1000
         break
     }
     this.gameScores += s
@@ -566,23 +566,33 @@ class Tetris {
 
   // 设置下落时间间隔/速度控制
   setDownInterval (score: number): void {
-    if (score > 4000) {
-      this.INTERVAL = 100
-    } else if (score > 3500) {
-      this.INTERVAL = 150
-    } else if (score > 3000) {
-      this.INTERVAL = 200
-    } else if (score > 2500) {
-      this.INTERVAL = 250
-    } else if (score > 2000) {
-      this.INTERVAL = 300
-    } else if (score > 1500) {
-      this.INTERVAL = 350
-    } else if (score > 1000) {
-      this.INTERVAL = 400
-    } else if (score > 500) {
-      this.INTERVAL = 450
+    if (score > 640000) {
+      this._updateSpeed(100)
+    } else if (score > 320000) {
+      this._updateSpeed(150)
+    } else if (score > 160000) {
+      this._updateSpeed(200)
+    } else if (score > 80000) {
+      this._updateSpeed(250)
+    } else if (score > 40000) {
+      this._updateSpeed(300)
+    } else if (score > 20000) {
+      this._updateSpeed(350)
+    } else if (score > 10000) {
+      this._updateSpeed(400)
+    } else if (score > 5000) {
+      this._updateSpeed(450)
     }
+  }
+
+  _updateSpeed(interval: number): void {
+    if (interval === this.INTERVAL) return
+    this.INTERVAL = interval
+    this.moveTimer && clearInterval(this.moveTimer)
+    // @ts-ignore
+    this.moveTimer = setInterval(() => {
+      this.move()
+    }, this.INTERVAL)
   }
 
   // 初始化游戏
