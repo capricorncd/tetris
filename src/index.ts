@@ -8,6 +8,7 @@ import Square from './square'
 import * as Types from '../types'
 import { CODES, DEF_OPTIONS, KEYBOARD_KEYS } from './constants'
 import './scss/style.scss'
+import { AudioPlayer } from './audio-player'
 
 /**
  * ***************************************************
@@ -72,12 +73,20 @@ class Tetris {
   private opts: Types.Options
 
   // constructor
+  private audio: AudioPlayer;
   constructor (opts: Types.Options) {
     this.opts = {
       ...DEF_OPTIONS,
       ...opts
     }
     this.outerDom = util.q(this.opts.container)
+    this.audio = new AudioPlayer()
+    /* eslint-disable @typescript-eslint/no-var-requires */
+    this.audio.addSource('bgm', require('./img/bgm.mp3').default)
+    /* eslint-disable @typescript-eslint/no-var-requires */
+    this.audio.addSource('death', require('./img/death.mp3').default)
+    /* eslint-disable @typescript-eslint/no-var-requires */
+    this.audio.addSource('remove', require('./img/remove.mp3').default)
     this.init()
   }
 
@@ -87,6 +96,8 @@ class Tetris {
     this.dom.className = 'zx-tetris-container'
     this.dom.id = this.domId
     this.dom.innerHTML = `
+      <section class="zx-tetris__inner">
+      <div class="tetris-start-button-wrapper"><button>Start</button></div>
       <div class="tetris-stage"></div>
       <div class="tetris-sider-wrapper">
         <div class="next-square"></div>
@@ -132,6 +143,7 @@ class Tetris {
           <div class="grid"></div>
         </div>
       </div>
+      </section>
     `
     if (this.outerDom) {
       this.outerDom.innerHTML = ''
@@ -352,6 +364,8 @@ class Tetris {
   checkGameOver (): boolean {
     for (let i = 0; i < this.stageArray[0].length; i++) {
       if (this.stageArray[0][i] === 1) {
+        this.audio.play('death')
+        this.audio.pause('bgm')
         return true
       }
     }
@@ -384,6 +398,7 @@ class Tetris {
         }
       }
       if (isClear) {
+        this.audio.play('remove')
         line += 1
         // 整体下移
         for (m = i; m > 0; m--) {
@@ -451,6 +466,7 @@ class Tetris {
   pause (): void {
     if (this.isGameOver) return
     if (this.isPause) {
+      this.audio.play('bgm', true)
       this.isPause = false
       // @ts-ignore
       this.moveTimer = setInterval(() => {
@@ -460,6 +476,7 @@ class Tetris {
       util.q(`#${this.domId} .tetris-pause`).innerText = 'Pause'
       // console.log('开始')
     } else {
+      this.audio.pause('bgm')
       this.isPause = true
       if (this.moveTimer) {
         clearInterval(this.moveTimer)
@@ -495,6 +512,11 @@ class Tetris {
     this.nextSquare = this.make(util.rand(7), util.rand(4))
     this.refreshDiv()
     this.refreshDiv(this.nextSquare.data, this.nextDivs)
+
+    if (this.isGameOver) {
+      this.audio.pause('death')
+      this.audio.play('bgm', true)
+    }
 
     this.isGameOver = false
     this.isPause = false
@@ -608,13 +630,7 @@ class Tetris {
 
     // 下一个方块
     this.performNext(util.rand(7), util.rand(4))
-    // @ts-ignore
-    this.moveTimer = setInterval(() => {
-      this.move()
-    }, this.INTERVAL)
 
-    // 游戏计时
-    this.gameTimeMeter()
     // IE浏览器移除底部控制按钮
     if (util.isIEBrower && util.ieBrowerVersion() < 10) {
       const body: any = util.q('body')
@@ -622,6 +638,25 @@ class Tetris {
       if (bodyClassName.indexOf('ie-brower') === -1) {
         body.className = 'ie-brower ' + bodyClassName
       }
+    }
+
+    // 游戏开始
+    const startButton = this.dom?.querySelector('.tetris-start-button-wrapper button') as HTMLButtonElement
+    if (startButton) {
+      startButton.addEventListener('click', () => {
+        this.audio.play('bgm', true)
+        const startButtonWrapper = this.dom?.querySelector('.tetris-start-button-wrapper') as HTMLElement
+        startButtonWrapper.style.display = 'none'
+        const control = this.dom?.querySelector('.tetris-control-wrapper') as HTMLElement
+        control.style.display = 'block'
+        // @ts-ignore
+        this.moveTimer = setInterval(() => {
+          this.move()
+        }, this.INTERVAL)
+
+        // 游戏计时
+        this.gameTimeMeter()
+      })
     }
   }
 }
