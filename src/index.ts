@@ -217,7 +217,7 @@ class Tetris {
     })
     util.eventListener(util.q(`#${this.domId} .btn-down`), 'click', () => {
       if (this.isPause) return
-      this.down()
+      this.down(true)
     })
     util.eventListener(util.q(`#${this.domId} .btn-rotate`), 'click', () => {
       if (this.isPause) return
