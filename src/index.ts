@@ -82,7 +82,7 @@ class Tetris {
     }
     this.outerDom = util.q(this.opts.container)
     this.init()
-    this.audio = new AudioPlayer(this.dom as HTMLElement)
+    this.audio = new AudioPlayer()
     /* eslint-disable @typescript-eslint/no-var-requires */
     this.audio.addSource('bgm', require('./img/bgm.mp3').default)
     /* eslint-disable @typescript-eslint/no-var-requires */

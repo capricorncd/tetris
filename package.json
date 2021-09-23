@@ -1,6 +1,6 @@
 {
   "name": "zx-tetris",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "tetris",
   "license": "MIT",
   "author": "Capricorncd",
@@ -10,6 +10,9 @@
   },
   "keywords": [
     "tetris",
+    "zx-tetris",
+    "game",
+    "audio",
     "dev3li"
   ],
   "main": "./dist/index.js",

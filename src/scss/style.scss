@@ -52,8 +52,8 @@ $gray: #999;
     flex: 0 0 200px;
     &:after {
       display: block;
-      position: relative;
-      z-index: -1;
+      position: absolute;
+      z-index: 1;
       top: 50%;
       margin-top: -7px;
       width: 100%;
@@ -62,8 +62,8 @@ $gray: #999;
       line-height: 1;
       color: #fff;
       content: '©Capricorncd';
-      filter: unquote('Alpha(opacity=10)');
-      opacity: .1;
+      filter: unquote('Alpha(opacity=20)');
+      opacity: .2;
     }
   }
   .tetris-sider-wrapper {
@@ -121,11 +121,14 @@ $gray: #999;
   }
   .current {
     background: url('../img/theme/red.png') no-repeat 0 0;
+    z-index: 2;
   }
   .done {
     background: url('../img/theme/green.png') no-repeat 0 0;
+    z-index: 2;
   }
   .none {
+    z-index: 0;
     background: url('../img/theme/none.png') no-repeat 0 0;
     opacity: .2;
     filter: unquote('Alpha(opacity=20)');

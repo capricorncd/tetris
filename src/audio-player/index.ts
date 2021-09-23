@@ -5,15 +5,13 @@
  */
 export class AudioPlayer {
   private context: AudioContext;
-  private audio: HTMLAudioElement;
   private readonly buffers: Record<string, AudioBuffer>;
   private readonly sources: Record<string, AudioBufferSourceNode>;
 
-  constructor(wrapper: HTMLElement) {
+  constructor() {
     // @ts-ignore
     const AudioContext = window.AudioContext || window.webkitAudioContext
     this.context = new AudioContext()
-    this.audio = this.createAudio(wrapper)
     this.buffers = {}
     this.sources = {}
   }
@@ -27,12 +25,6 @@ export class AudioPlayer {
     }, (e) => {
       console.error(e)
     })
-  }
-
-  createAudio(wrapper: HTMLElement): HTMLAudioElement {
-    const audio = new Audio()
-    wrapper.append(audio)
-    return audio
   }
 
   play(name: string, isLoop = false): void {
