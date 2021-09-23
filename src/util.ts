@@ -79,3 +79,27 @@ const util = {
 }
 
 export default util
+
+const SCORE_CACHE_KEY = 'maxScoreInfo'
+
+export function getMaxScore(): {score: number; date: number} | null {
+  try {
+    const cache = localStorage.getItem(SCORE_CACHE_KEY)
+    if (cache) {
+      return JSON.parse(cache)
+    }
+  } catch (e) {
+    // console.log(e);
+  }
+  return null
+}
+
+export function setMaxScore(score: number): void {
+  const cache = getMaxScore() || { score: 0, date: 0 }
+  if (cache.score >= score) return
+  const data = {
+    score,
+    date: +new Date()
+  }
+  localStorage.setItem(SCORE_CACHE_KEY, JSON.stringify(data))
+}

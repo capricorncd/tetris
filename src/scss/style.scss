@@ -75,13 +75,25 @@ $gray: #999;
       height: 80px;
     }
     .tetris-statistics {
-      margin-top: 40px;
+      margin-top: 10px;
       .game-times {
         color: #fff;
       }
       .game-scores {
-        margin-top: 20px;
+        margin-top: 10px;
         color: #fff;
+        span {
+          display: block;
+          &.label {
+            opacity: 0.5;
+            font-size: 0.8em;
+          }
+        }
+      }
+      .history-score {
+        .score {
+          color: $green;
+        }
       }
     }
     .control-wrapper {

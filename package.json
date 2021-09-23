@@ -1,6 +1,6 @@
 {
   "name": "zx-tetris",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "tetris",
   "license": "MIT",
   "author": "Capricorncd",
@@ -29,7 +29,7 @@
     "clean-webpack-plugin": "^4.0.0-alpha.0",
     "copy-webpack-plugin": "^8.1.1",
     "css-loader": "^5.2.4",
-    "date-utils-2020": "^1.0.1",
+    "date-utils-2020": "^1.0.2",
     "eslint": "^7.25.0",
     "eslint-config-standard": "^16.0.2",
     "eslint-plugin-import": "^2.22.1",

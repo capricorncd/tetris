@@ -3,12 +3,13 @@
  * Sat Oct 21 2017 18:49:07 GMT+0800
  * https://github.com/capricorncd
  */
-import util from './util'
+import util, { getMaxScore, setMaxScore } from './util'
 import Square from './square'
 import * as Types from '../types'
 import { CODES, DEF_OPTIONS, KEYBOARD_KEYS } from './constants'
 import './scss/style.scss'
 import { AudioPlayer } from './audio-player'
+import { formatDate } from 'date-utils-2020'
 
 /**
  * ***************************************************
@@ -27,7 +28,7 @@ class Tetris {
   // 游戏是否结束
   private isGameOver = false
   // 是否暂停
-  private isPause = false
+  private isPause = true
   // 游戏计分
   private gameScores = 0
   // 游戏舞台二维矩阵
@@ -108,6 +109,12 @@ class Tetris {
             <span class="times">00:00</span>
           </div>
           <div class="game-scores">
+            <span class="label">Score:</span>
+            <span class="score">0</span>
+          </div>
+          <div class="game-scores history-score">
+            <span class="label">Highest score in history</span>
+            <span class="label hook-date"></span>
             <span class="score">0</span>
           </div>
         </div>
@@ -187,7 +194,7 @@ class Tetris {
       }
       // down
       else if (key === KEYBOARD_KEYS.ARROW_DOWN || keyCode === 40) {
-        this.down()
+        this.down(true)
       }
       // left
       else if (key === KEYBOARD_KEYS.ARROW_LEFT || keyCode === 37) {
@@ -327,7 +334,7 @@ class Tetris {
   }
 
   // 下移方块
-  down (): boolean {
+  down (isManual = false): boolean {
     const currSquare = this.currSquare as Square
     // 判断是否能继续下降
     if (currSquare.canDown(this.stageArray)) {
@@ -335,6 +342,7 @@ class Tetris {
       currSquare.down()
       this.resetPos('set')
       this.refreshDiv()
+      isManual && this.audio.play('move')
       return true
     }
     return false
@@ -344,6 +352,9 @@ class Tetris {
   fall (): void {
     /* eslint-disable no-empty */
     while (this.down()) {}
+    if (!this.isPause && !this.isGameOver) {
+      this.audio.play('move')
+    }
   }
 
   // 方块移动到底部，固定方块
@@ -370,6 +381,7 @@ class Tetris {
       if (this.stageArray[0][i] === 1) {
         this.audio.play('death')
         this.audio.pause('bgm')
+        setMaxScore(this.gameScores)
         return true
       }
     }
@@ -521,6 +533,8 @@ class Tetris {
       this.audio.play('bgm', true)
     }
 
+    this.initHistoryScore()
+
     this.isGameOver = false
     this.isPause = false
     // 游戏计时
@@ -647,6 +661,7 @@ class Tetris {
     const startButton = this.dom?.querySelector('.tetris-start-button-wrapper button') as HTMLButtonElement
     if (startButton) {
       startButton.addEventListener('click', () => {
+        this.isPause = false
         this.audio.play('bgm', true)
         const startButtonWrapper = this.dom?.querySelector('.tetris-start-button-wrapper') as HTMLElement
         startButtonWrapper.style.display = 'none'
@@ -658,6 +673,19 @@ class Tetris {
         // 游戏计时
         this.gameTimeMeter()
       })
+    }
+
+    this.initHistoryScore()
+  }
+
+  initHistoryScore(): void {
+    // initial history score
+    const historyScore = this.dom?.querySelector('.history-score .score') as HTMLElement
+    const historyScoreDate = this.dom?.querySelector('.history-score .hook-date') as HTMLElement
+    const cacheScoreInfo = getMaxScore()
+    if (historyScore && historyScoreDate && cacheScoreInfo && cacheScoreInfo.score) {
+      historyScoreDate.innerText = formatDate(cacheScoreInfo.date, 'MM/dd hh:mm')
+      historyScore.innerText = String(cacheScoreInfo.score)
     }
   }
 }
