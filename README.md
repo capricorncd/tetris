@@ -32,6 +32,8 @@ Left: `←`, Right: `→`, Rotate: `↑`, Down: `↓`, OK: `Space`, Pause: `Ente
 
 ![Tetris 俄罗斯方块](src/img/qrcode.png)
 
+https://capricorncd.github.io/tetris/dist
+
 ## 初始化方法
 
 ```html
