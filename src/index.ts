@@ -85,7 +85,9 @@ class Tetris {
     /* eslint-disable @typescript-eslint/no-var-requires */
     this.audio.addSource('bgm', require('./img/bgm.mp3').default)
     /* eslint-disable @typescript-eslint/no-var-requires */
-    this.audio.addSource('death', require('./img/death.mp3').default)
+    this.audio.addSource('move', require('./img/bubble2.mp3').default)
+    /* eslint-disable @typescript-eslint/no-var-requires */
+    this.audio.addSource('death', require('./img/game-over-tetries.mp3').default)
     /* eslint-disable @typescript-eslint/no-var-requires */
     this.audio.addSource('remove', require('./img/remove.mp3').default)
   }
@@ -296,6 +298,7 @@ class Tetris {
       currSquare.rotate()
       this.resetPos('set')
       this.refreshDiv()
+      this.audio.play('move')
     }
   }
 
@@ -307,6 +310,7 @@ class Tetris {
       currSquare.left()
       this.resetPos('set')
       this.refreshDiv()
+      this.audio.play('move')
     }
   }
 
@@ -318,6 +322,7 @@ class Tetris {
       currSquare.right()
       this.resetPos('set')
       this.refreshDiv()
+      this.audio.play('move')
     }
   }
 

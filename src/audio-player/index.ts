@@ -52,6 +52,8 @@ export class AudioPlayer {
           source?.disconnect(this.context.destination)
           source = null
         })
+      } else {
+        throw new Error(`"${name}" audio is not registered`)
       }
     }
   }
@@ -60,9 +62,5 @@ export class AudioPlayer {
     if (this.sources[name]) {
       this.sources[name].disconnect(this.context.destination)
     }
-  }
-
-  async stop(): Promise<void> {
-    await this.context.resume()
   }
 }

@@ -24,7 +24,7 @@ http://localhost:9000
 
 ![Tetris 俄罗斯方块](src/img/preview.jpg)
 
-### Keyboard
+### Keyboard 键盘操作
 
 Left: `←`, Right: `→`, Rotate: `↑`, Down: `↓`, OK: `Space`, Pause: `Enter`, Restart: `Shift`
 
