@@ -80,14 +80,14 @@ class Tetris {
       ...opts
     }
     this.outerDom = util.q(this.opts.container)
-    this.audio = new AudioPlayer()
+    this.init()
+    this.audio = new AudioPlayer(this.dom as HTMLElement)
     /* eslint-disable @typescript-eslint/no-var-requires */
     this.audio.addSource('bgm', require('./img/bgm.mp3').default)
     /* eslint-disable @typescript-eslint/no-var-requires */
     this.audio.addSource('death', require('./img/death.mp3').default)
     /* eslint-disable @typescript-eslint/no-var-requires */
     this.audio.addSource('remove', require('./img/remove.mp3').default)
-    this.init()
   }
 
   // 创建游戏DOM
@@ -96,8 +96,8 @@ class Tetris {
     this.dom.className = 'zx-tetris-container'
     this.dom.id = this.domId
     this.dom.innerHTML = `
-      <section class="zx-tetris__inner">
       <div class="tetris-start-button-wrapper"><button>Start</button></div>
+      <section class="zx-tetris__inner">
       <div class="tetris-stage"></div>
       <div class="tetris-sider-wrapper">
         <div class="next-square"></div>
@@ -115,7 +115,7 @@ class Tetris {
           <button class="tetris-pause">Pause</button>
         </div>
       </div>
-
+      </section>
       <div class="tetris-control-wrapper">
         <div class="grid-wrapper">
           <div class="grid"></div>
@@ -143,7 +143,6 @@ class Tetris {
           <div class="grid"></div>
         </div>
       </div>
-      </section>
     `
     if (this.outerDom) {
       this.outerDom.innerHTML = ''
@@ -513,8 +512,7 @@ class Tetris {
     this.refreshDiv()
     this.refreshDiv(this.nextSquare.data, this.nextDivs)
 
-    if (this.isGameOver) {
-      this.audio.pause('death')
+    if (this.isGameOver || this.isPause) {
       this.audio.play('bgm', true)
     }
 
@@ -647,8 +645,6 @@ class Tetris {
         this.audio.play('bgm', true)
         const startButtonWrapper = this.dom?.querySelector('.tetris-start-button-wrapper') as HTMLElement
         startButtonWrapper.style.display = 'none'
-        const control = this.dom?.querySelector('.tetris-control-wrapper') as HTMLElement
-        control.style.display = 'block'
         // @ts-ignore
         this.moveTimer = setInterval(() => {
           this.move()

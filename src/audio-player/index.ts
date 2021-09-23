@@ -9,9 +9,11 @@ export class AudioPlayer {
   private readonly buffers: Record<string, AudioBuffer>;
   private readonly sources: Record<string, AudioBufferSourceNode>;
 
-  constructor() {
+  constructor(wrapper: HTMLElement) {
+    // @ts-ignore
+    const AudioContext = window.AudioContext || window.webkitAudioContext
     this.context = new AudioContext()
-    this.audio = this.createAudio()
+    this.audio = this.createAudio(wrapper)
     this.buffers = {}
     this.sources = {}
   }
@@ -19,14 +21,17 @@ export class AudioPlayer {
   async addSource(name: string, path: string): Promise<void> {
     const res = await fetch(path)
     const buffer = await res.arrayBuffer()
-    const audioBuffer: AudioBuffer = await this.context.decodeAudioData(buffer)
-    this.buffers[name] = audioBuffer
+    // Safari doesn't know the promise based decodeAudioData. You will have to use callbacks.
+    this.context.decodeAudioData(buffer, (buf) => {
+      this.buffers[name] = buf
+    }, (e) => {
+      console.error(e)
+    })
   }
 
-  createAudio(): HTMLAudioElement {
+  createAudio(wrapper: HTMLElement): HTMLAudioElement {
     const audio = new Audio()
-    const body = document.querySelector('body') as HTMLBodyElement
-    body.append(audio)
+    wrapper.append(audio)
     return audio
   }
 
@@ -38,12 +43,13 @@ export class AudioPlayer {
       source.connect(this.context.destination)
       if (this.buffers[name]) {
         source.buffer = this.buffers[name]
-        source.start()
         source.loop = isLoop
+        source.start()
         if (isLoop) {
           this.sources[name] = source
         }
         source.addEventListener('ended', () => {
+          source?.disconnect(this.context.destination)
           source = null
         })
       }

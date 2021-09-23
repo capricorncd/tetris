@@ -9,10 +9,17 @@ $gray: #999;
   position: relative;
   background-color: #333;
   display: flex;
+  flex-direction: column;
+  max-width: 100%;
+  width: 290px;
+  margin: 0 auto;
   button {
     outline: none;
     cursor: pointer;
     background: none;
+  }
+  audio {
+    display: none;
   }
   .zx-tetris__inner {
     position: relative;
@@ -26,7 +33,7 @@ $gray: #999;
     left: 0;
     width: 100%;
     height: 100%;
-    background: rgba(0, 0, 0, 0.7);
+    background: rgba(0, 0, 0, 0.9);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -128,11 +135,8 @@ $gray: #999;
     background-size: cover;
   }
   .tetris-control-wrapper {
-    display: none;
-    position: absolute;
-    left: 0;
-    right: 0;
-    bottom: 0;
+    position: relative;
+    margin-top: 10px;
     .grid-wrapper {
       display: flex;
       .grid {
@@ -170,16 +174,6 @@ $gray: #999;
   .done {
     //background: url('../img/theme/red.png') no-repeat 0 0;
     background-size: cover;
-  }
-}
-
-@media screen and (min-width: 375px) {
-  .zx-tetris-container {
-    .tetris-control-wrapper {
-      position: absolute;
-      top: 420px;
-      max-width: 320px;
-    }
   }
 }
 
