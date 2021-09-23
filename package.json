@@ -13,6 +13,9 @@
     "zx-tetris",
     "game",
     "audio",
+    "typescript",
+    "俄罗斯方块",
+    "游戏",
     "dev3li"
   ],
   "main": "./dist/index.js",
