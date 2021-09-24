@@ -27,6 +27,7 @@
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/no-use-before-define': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
+    '@typescript-eslint/no-var-requires': 'off',
     'no-use-before-define': 'off',
   },
   parser: '@typescript-eslint/parser'

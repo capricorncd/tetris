@@ -19,4 +19,6 @@ export interface Options {
   error: (data: MessageData) => void;
 }
 
-export type NumberArray = number[]
+export type NumberArray = number[];
+
+export type ProgressHandler = (progress: number) => void;

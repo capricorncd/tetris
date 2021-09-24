@@ -3,6 +3,8 @@
  * https://github.com/capricorncd
  * Date: 2021-09-22 22:27 (GMT+0900)
  */
+import { ProgressHandler } from '~/types'
+
 export class AudioPlayer {
   private context: AudioContext;
   private readonly buffers: Record<string, AudioBuffer>;
@@ -16,14 +18,45 @@ export class AudioPlayer {
     this.sources = {}
   }
 
-  async addSource(name: string, path: string): Promise<void> {
-    const res = await fetch(path)
-    const buffer = await res.arrayBuffer()
-    // Safari doesn't know the promise based decodeAudioData. You will have to use callbacks.
-    this.context.decodeAudioData(buffer, (buf) => {
-      this.buffers[name] = buf
-    }, (e) => {
-      console.error(e)
+  /**
+   * add audio source
+   * @param name
+   * @param path
+   * @param progress
+   */
+  addSource(name: string | Record<string, string>, path?: string | ProgressHandler, progress?: ProgressHandler): Promise<void> {
+    const input: Record<string, string> = typeof name === 'string'
+      ? { [name]: path as string }
+      : name
+    progress = typeof path === 'function' ? path : progress
+
+    return new Promise<void>((resolve) => {
+      const entries = Object.entries(input)
+      const len = entries.length
+      if (!len) {
+        progress && progress(1)
+        resolve()
+        return
+      }
+      let count = 0
+      for (const [key, value] of entries) {
+        fetch(value).then(res => {
+          res.arrayBuffer().then(buffer => {
+            // Safari doesn't know the promise based decodeAudioData. You will have to use callbacks.
+            this.context.decodeAudioData(buffer, (buf) => {
+              this.buffers[key] = buf
+              count++
+              progress && progress(count / len)
+              if (count === len) resolve()
+            }, (e) => {
+              console.error(e)
+              count++
+              progress && progress(count / len)
+              if (count === len) resolve()
+            })
+          })
+        })
+      }
     })
   }
 
@@ -31,9 +64,9 @@ export class AudioPlayer {
     if (this.sources[name]) {
       this.sources[name].connect(this.context.destination)
     } else {
-      let source: AudioBufferSourceNode | null = this.context.createBufferSource()
-      source.connect(this.context.destination)
       if (this.buffers[name]) {
+        let source: AudioBufferSourceNode = this.context.createBufferSource()
+        source.connect(this.context.destination)
         source.buffer = this.buffers[name]
         source.loop = isLoop
         source.start()
@@ -41,7 +74,8 @@ export class AudioPlayer {
           this.sources[name] = source
         }
         source.addEventListener('ended', () => {
-          source?.disconnect(this.context.destination)
+          source.disconnect(this.context.destination)
+          // @ts-ignore
           source = null
         })
       } else {

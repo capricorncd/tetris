@@ -29,6 +29,8 @@ class Tetris {
   private isGameOver = false
   // 是否暂停
   private isPause = true
+  // 音频资源加载结束
+  private isLoaded = false
   // 游戏计分
   private gameScores = 0
   // 游戏舞台二维矩阵
@@ -81,16 +83,8 @@ class Tetris {
       ...opts
     }
     this.outerDom = util.q(this.opts.container)
-    this.init()
     this.audio = new AudioPlayer()
-    /* eslint-disable @typescript-eslint/no-var-requires */
-    this.audio.addSource('bgm', require('./img/bgm.mp3').default)
-    /* eslint-disable @typescript-eslint/no-var-requires */
-    this.audio.addSource('move', require('./img/bubble2.mp3').default)
-    /* eslint-disable @typescript-eslint/no-var-requires */
-    this.audio.addSource('death', require('./img/game-over-tetries.mp3').default)
-    /* eslint-disable @typescript-eslint/no-var-requires */
-    this.audio.addSource('remove', require('./img/remove.mp3').default)
+    this.init()
   }
 
   // 创建游戏DOM
@@ -99,7 +93,7 @@ class Tetris {
     this.dom.className = 'zx-tetris-container'
     this.dom.id = this.domId
     this.dom.innerHTML = `
-      <div class="tetris-start-button-wrapper"><button>Start</button></div>
+      <div class="tetris-start-button-wrapper"><button>0%</button></div>
       <section class="zx-tetris__inner">
       <div class="tetris-stage"></div>
       <div class="tetris-sider-wrapper">
@@ -660,7 +654,10 @@ class Tetris {
     // 游戏开始
     const startButton = this.dom?.querySelector('.tetris-start-button-wrapper button') as HTMLButtonElement
     if (startButton) {
+      this.initAudio(startButton)
       startButton.addEventListener('click', () => {
+        // 音频资源未加载完成
+        if (!this.isLoaded) return
         this.isPause = false
         this.audio.play('bgm', true)
         const startButtonWrapper = this.dom?.querySelector('.tetris-start-button-wrapper') as HTMLElement
@@ -687,6 +684,23 @@ class Tetris {
       historyScoreDate.innerText = formatDate(cacheScoreInfo.date, 'MM/dd hh:mm')
       historyScore.innerText = String(cacheScoreInfo.score)
     }
+  }
+
+  initAudio(startButton: HTMLButtonElement): void {
+    const resources = {
+      bgm: require('./img/bgm.mp3').default,
+      move: require('./img/bubble2.mp3').default,
+      death: require('./img/game-over-tetries.mp3').default,
+      remove: require('./img/remove.mp3').default
+    }
+    this.audio.addSource(resources, progress => {
+      this.isLoaded = progress === 1
+      startButton.innerText = this.isLoaded ? 'Start' : Math.round(progress * 100) + '%'
+    }).then(() => console.log('audio loaded!'))
+    // this.audio.addSource('bgm', require('./img/bgm.mp3').default)
+    // this.audio.addSource('move', require('./img/bubble2.mp3').default)
+    // this.audio.addSource('death', require('./img/game-over-tetries.mp3').default)
+    // this.audio.addSource('remove', require('./img/remove.mp3').default)
   }
 }
 
