@@ -116,6 +116,7 @@ class Tetris {
 <!--          <button class="tetris-setup">Setup</button>-->
           <button class="tetris-restart">Restart</button>
           <button class="tetris-pause">Pause</button>
+          <div class="volume"><span class="l">-</span><b>10</b><span class="r">+</span></div>
         </div>
       </div>
       </section>
@@ -651,8 +652,10 @@ class Tetris {
       }
     }
 
+    const dom = this.dom as HTMLElement
+
     // 游戏开始
-    const startButton = this.dom?.querySelector('.tetris-start-button-wrapper button') as HTMLButtonElement
+    const startButton = dom.querySelector('.tetris-start-button-wrapper button') as HTMLButtonElement
     if (startButton) {
       this.initAudio(startButton)
       startButton.addEventListener('click', () => {
@@ -669,10 +672,30 @@ class Tetris {
 
         // 游戏计时
         this.gameTimeMeter()
+
+        setTimeout(() => {
+          this.audio.setVolume(0.1)
+        }, 5000)
       })
     }
 
-    this.initHistoryScore()
+    // volume control
+    let volume = 10
+    const volumeValue = dom.querySelector('.volume b') as HTMLElement
+    const volumeDecrease = dom.querySelector('.volume .l') as HTMLElement
+    const volumeIncrease = dom.querySelector('.volume .r') as HTMLElement
+    volumeDecrease.addEventListener('click', (e) => {
+      e.preventDefault()
+      volume = Math.max(0, volume - 10)
+      this.audio.setVolume(volume / 100)
+      volumeValue.innerText = String(volume)
+    })
+    volumeIncrease.addEventListener('click', (e) => {
+      e.preventDefault()
+      volume = Math.min(500, volume + 10)
+      this.audio.setVolume(volume / 100)
+      volumeValue.innerText = String(volume)
+    })
   }
 
   initHistoryScore(): void {

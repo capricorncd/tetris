@@ -9,11 +9,15 @@ export class AudioPlayer {
   private context: AudioContext;
   private readonly buffers: Record<string, AudioBuffer>;
   private readonly sources: Record<string, AudioBufferSourceNode>;
+  private readonly gainNode: GainNode;
 
   constructor() {
     // @ts-ignore
     const AudioContext = window.AudioContext || window.webkitAudioContext
     this.context = new AudioContext()
+    this.gainNode = this.context.createGain()
+    this.gainNode.gain.value = 0.1
+    this.gainNode.connect(this.context.destination)
     this.buffers = {}
     this.sources = {}
   }
@@ -62,11 +66,13 @@ export class AudioPlayer {
 
   play(name: string, isLoop = false): void {
     if (this.sources[name]) {
-      this.sources[name].connect(this.context.destination)
+      // this.sources[name].connect(this.context.destination)
+      this.sources[name].connect(this.gainNode)
     } else {
       if (this.buffers[name]) {
         let source: AudioBufferSourceNode = this.context.createBufferSource()
-        source.connect(this.context.destination)
+        // source.connect(this.context.destination)
+        source.connect(this.gainNode)
         source.buffer = this.buffers[name]
         source.loop = isLoop
         source.start()
@@ -74,7 +80,8 @@ export class AudioPlayer {
           this.sources[name] = source
         }
         source.addEventListener('ended', () => {
-          source.disconnect(this.context.destination)
+          // source.disconnect(this.context.destination)
+          source.disconnect(this.gainNode)
           // @ts-ignore
           source = null
         })
@@ -86,7 +93,12 @@ export class AudioPlayer {
 
   pause(name: string): void {
     if (this.sources[name]) {
-      this.sources[name].disconnect(this.context.destination)
+      // this.sources[name].disconnect(this.context.destination)
+      this.sources[name].disconnect(this.gainNode)
     }
+  }
+
+  setVolume(value: number): void {
+    this.gainNode.gain.value = value
   }
 }
