@@ -1,7 +1,7 @@
 {
   "name": "zx-tetris",
   "version": "0.1.9",
-  "description": "tetris",
+  "description": "tetris game",
   "license": "MIT",
   "author": "Capricorncd",
   "scripts": {
@@ -16,7 +16,7 @@
     "typescript",
     "俄罗斯方块",
     "游戏",
-    "dev3li"
+    "dev3cli"
   ],
   "main": "./dist/index.js",
   "devDependencies": {
