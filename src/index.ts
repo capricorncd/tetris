@@ -3,7 +3,7 @@
  * Sat Oct 21 2017 18:49:07 GMT+0800
  * https://github.com/capricorncd
  */
-import util, { getMaxScore, setMaxScore } from './util'
+import util, { getMaxScore, setMaxScore, isSafari } from './util'
 import Square from './square'
 import * as Types from '../types'
 import { CODES, DEF_OPTIONS, KEYBOARD_KEYS } from './constants'
@@ -653,6 +653,12 @@ class Tetris {
     }
 
     const dom = this.dom as HTMLElement
+
+    if (isSafari()) {
+      dom.addEventListener('click', (e) => {
+        e.preventDefault()
+      })
+    }
 
     // 游戏开始
     const startButton = dom.querySelector('.tetris-start-button-wrapper button') as HTMLButtonElement

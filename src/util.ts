@@ -103,3 +103,8 @@ export function setMaxScore(score: number): void {
   }
   localStorage.setItem(SCORE_CACHE_KEY, JSON.stringify(data))
 }
+
+export function isSafari(): boolean {
+  const ua = navigator.userAgent
+  return /safari/i.test(ua) && /apple/i.test(navigator.vendor)
+}
