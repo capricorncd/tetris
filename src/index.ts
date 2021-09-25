@@ -678,10 +678,6 @@ class Tetris {
 
         // 游戏计时
         this.gameTimeMeter()
-
-        setTimeout(() => {
-          this.audio.setVolume(0.1)
-        }, 5000)
       })
     }
 
