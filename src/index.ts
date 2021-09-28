@@ -114,37 +114,25 @@ class Tetris {
         </div>
         <div class="control-wrapper">
 <!--          <button class="tetris-setup">Setup</button>-->
-          <button class="tetris-restart">Restart</button>
-          <button class="tetris-pause">Pause</button>
+          <button class="tetris-restart">Restart<i>Shift</i></button>
+          <button class="tetris-pause">Pause<i>Enter</i></button>
           <div class="volume"><span class="l">-</span><b>10</b><span class="r">+</span></div>
         </div>
       </div>
       </section>
       <div class="tetris-control-wrapper">
+        <div class="fall"><button class="btn-fall"><b>OK</b><i>SPACE</i></button></div>
         <div class="grid-wrapper">
-          <div class="grid"></div>
           <div class="grid">
             <button class="btn-rotate">Rotate</button>
           </div>
-          <div class="grid"></div>
-        </div>
-        <div class="grid-wrapper">
           <div class="grid">
             <button class="btn-left">Left</button>
-          </div>
-          <div class="grid">
-            <button class="btn-fall">OK</button>
-          </div>
-          <div class="grid">
             <button class="btn-right">Right</button>
           </div>
-        </div>
-        <div class="grid-wrapper">
-          <div class="grid"></div>
           <div class="grid">
             <button class="btn-down">Down</button>
           </div>
-          <div class="grid"></div>
         </div>
       </div>
     `
@@ -484,7 +472,7 @@ class Tetris {
         this.move()
       }, this.INTERVAL)
       this.gameTimeMeter()
-      util.q(`#${this.domId} .tetris-pause`).innerText = 'Pause'
+      util.q(`#${this.domId} .tetris-pause`).innerHTML = 'Pause<i>Enter</i>'
       // console.log('开始')
     } else {
       this.audio.pause('bgm')
@@ -497,7 +485,7 @@ class Tetris {
         clearInterval(this.gameTimer)
         this.gameTimer = null
       }
-      util.q(`#${this.domId} .tetris-pause`).innerText = 'Start'
+      util.q(`#${this.domId} .tetris-pause`).innerHTML = 'Start<i>Enter</i>'
       // console.log('暂停')
     }
   }
@@ -544,7 +532,7 @@ class Tetris {
     this.moveTimer = setInterval(() => {
       this.move()
     }, this.INTERVAL)
-    util.q(`#${this.domId} .tetris-pause`).innerText = 'Pause'
+    util.q(`#${this.domId} .tetris-pause`).innerHTML = 'Pause<i>Enter</i>'
     util.q(`#${this.domId}`).className = 'zx-tetris-container'
   }
 
@@ -698,6 +686,8 @@ class Tetris {
       this.audio.setVolume(volume / 100)
       volumeValue.innerText = String(volume)
     })
+
+    this.initHistoryScore()
   }
 
   initHistoryScore(): void {

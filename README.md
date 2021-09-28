@@ -22,15 +22,15 @@ http://localhost:9000
 
 ## 游戏截图
 
-![Tetris 俄罗斯方块](src/img/preview.jpg)
+![Tetris 俄罗斯方块](./preview.jpg)
 
 ### Keyboard 键盘操作
 
-Left: `←`, Right: `→`, Rotate: `↑`, Down: `↓`, OK: `Space`, Pause: `Enter`, Restart: `Shift`
+Left: `←`, Right: `→`, Rotate: `↑`, Down: `↓`, OK: `Space`, Start/Pause: `Enter`, Restart: `Shift`
 
 ## 扫码体验
 
-![Tetris 俄罗斯方块](src/img/qrcode.png)
+![Tetris 俄罗斯方块](./qrcode.png)
 
 https://capricorncd.github.io/tetris/dist
 

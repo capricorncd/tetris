@@ -1,7 +1,7 @@
 {
   "name": "zx-tetris",
-  "version": "0.1.9",
-  "description": "tetris game",
+  "version": "0.1.10",
+  "description": "Tetris game",
   "license": "MIT",
   "author": "Capricorncd",
   "scripts": {
@@ -12,11 +12,12 @@
     "tetris",
     "zx-tetris",
     "game",
-    "audio",
+    "AudioContext",
     "typescript",
     "俄罗斯方块",
     "游戏",
-    "dev3cli"
+    "dev3cli",
+    "webpack"
   ],
   "main": "./dist/index.js",
   "devDependencies": {
