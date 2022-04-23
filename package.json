@@ -6,7 +6,9 @@
   "author": "Capricorncd",
   "scripts": {
     "dev": "webpack serve",
-    "build": "webpack --mode production"
+    "build": "webpack --mode production",
+    "test": "npx playwright test",
+    "lint": "eslint --fix --ext .js,.ts src tests ./*.ts ./*.js"
   },
   "keywords": [
     "tetris",
@@ -23,6 +25,7 @@
   "devDependencies": {
     "@babel/plugin-transform-typescript": "^7.13.0",
     "@babel/preset-typescript": "^7.13.0",
+    "@playwright/test": "^1.21.1",
     "@types/html-webpack-plugin": "^3.2.5",
     "@types/jest": "^26.0.23",
     "@types/node": "^15.0.1",

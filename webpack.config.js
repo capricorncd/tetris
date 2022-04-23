@@ -11,7 +11,7 @@ const EslintWebpackPlugin = require('eslint-webpack-plugin')
 const HtmlWebpackPlugin = require('html-webpack-plugin')
 
 // https://github.com/webpack-contrib/copy-webpack-plugin
-const CopyWebpackPlugin = require('copy-webpack-plugin')
+// const CopyWebpackPlugin = require('copy-webpack-plugin')
 const { formatDate } = require('date-utils-2020')
 const pkg = require('./package.json')
 
@@ -29,7 +29,7 @@ const baseConfig = {
   output: {
     path: resolve(__dirname, './dist'),
     filename: 'tetris.min.js',
-    libraryTarget: 'window',
+    libraryTarget: 'window'
     // umdNamedDefine: true,
   },
   resolve: {
@@ -45,7 +45,7 @@ const baseConfig = {
         use: [
           'style-loader',
           'css-loader',
-          'sass-loader',
+          'sass-loader'
           // {
           //   loader: 'style-resources-loader',
           //   options: {
@@ -89,8 +89,8 @@ const baseConfig = {
     new HtmlWebpackPlugin({
       template: 'index.html',
       filename: 'index.html',
-      inject: false,
-    }),
+      inject: false
+    })
 
   ]
 }
@@ -105,7 +105,7 @@ module.exports = isProd
         `Author: ${pkg.author}`,
         `Repository: ${pkg.homepage}`,
         `Released on: ${formatDate(new Date(), 'yyyy-MM-dd hh:mm:ss')}`
-      ].join('\n')),
+      ].join('\n'))
       // https://github.com/webpack-contrib/copy-webpack-plugin
       // new CopyWebpackPlugin({
       //   patterns: [{
@@ -127,7 +127,7 @@ module.exports = isProd
       port: 9000,
       // Fixed: (index):19 Uncaught ReferenceError: Tetris is not defined
       // that development
-      injectClient: false,
+      injectClient: false
     },
     plugins: [
       // https://www.npmjs.com/package/eslint-webpack-plugin

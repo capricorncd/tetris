@@ -80,3 +80,5 @@ sw.*
 #package-lock.json
 #yarn.lock
 .log*
+test-results/
+playwright-report/
