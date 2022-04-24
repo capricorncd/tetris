@@ -6,7 +6,8 @@
 import { test, expect } from '@playwright/test'
 
 test.beforeEach(async ({ page }) => {
-  await page.goto('http://localhost:9000')
+  // await page.goto('http://localhost:9000')
+  await page.goto('https://capricorncd.github.io/tetris/dist')
 })
 
 test.describe('Before Game Start', () => {
@@ -23,6 +24,7 @@ test.describe('Before Game Start', () => {
   })
 
   test('点击Start按钮，loading图层被隐藏', async ({ page }) => {
+    await page.waitForLoadState('load')
     await page.locator('.tetris-start-button-wrapper button').click()
     const startWrapper = page.locator('.tetris-start-button-wrapper')
     await expect(startWrapper).toBeHidden()

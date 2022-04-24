@@ -8,6 +8,10 @@
     "dev": "webpack serve",
     "build": "webpack --mode production",
     "test": "npx playwright test",
+    "test:debug": "npx playwright test --debug",
+    "test:gen": "npx playwright codegen",
+    "test:trace": "npx playwright show-trace",
+    "test:report": "npx playwright show-report",
     "lint": "eslint --fix --ext .js,.ts src tests ./*.ts ./*.js"
   },
   "keywords": [
@@ -48,6 +52,7 @@
     "eslint-webpack-plugin": "^2.5.4",
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.3.1",
+    "playwright": "^1.21.1",
     "sass": "^1.32.12",
     "sass-loader": "^11.0.1",
     "style-loader": "^2.0.0",

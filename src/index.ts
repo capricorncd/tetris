@@ -77,7 +77,7 @@ class Tetris {
 
   // constructor
   private audio: AudioPlayer;
-  constructor (opts: Types.Options) {
+  constructor(opts: Types.Options) {
     this.opts = {
       ...DEF_OPTIONS,
       ...opts
@@ -88,7 +88,7 @@ class Tetris {
   }
 
   // 创建游戏DOM
-  createGameDom (): void {
+  createGameDom(): void {
     this.dom = document.createElement('div')
     this.dom.className = 'zx-tetris-container'
     this.dom.id = this.domId
@@ -139,14 +139,14 @@ class Tetris {
     if (this.outerDom) {
       this.outerDom.innerHTML = ''
       this.outerDom.appendChild(this.dom)
-      this.opts.ready({ code: 0, msg: `${CODES[0]} in '${this.opts.container}'` })
+      // this.opts.ready({ code: 0, msg: `${CODES[0]} in '${this.opts.container}'` })
     } else {
       this.opts.error({ code: 2, msg: CODES[2] })
     }
   }
 
   // 游戏控制
-  gameController (): void {
+  gameController(): void {
     // 绑定键盘事件
     util.eventListener(document, 'keydown', (e: KeyboardEvent) => {
       e.preventDefault()
@@ -223,7 +223,7 @@ class Tetris {
   }
 
   // 初始化Div
-  initDiv (container: HTMLElement, data: Types.NumberArray[], divs: HTMLElement[][]): void {
+  initDiv(container: HTMLElement, data: Types.NumberArray[], divs: HTMLElement[][]): void {
     const ieVer: number = util.ieBrowerVersion()
     for (let i = 0; i < data.length; i++) {
       const arr: HTMLElement[] = []
@@ -244,7 +244,7 @@ class Tetris {
   }
 
   // 刷新div
-  refreshDiv (data: Types.NumberArray[] = this.stageArray, divs: HTMLElement[][] = this.stageDivs): void {
+  refreshDiv(data: Types.NumberArray[] = this.stageArray, divs: HTMLElement[][] = this.stageDivs): void {
     for (let i = 0; i < data.length; i++) {
       for (let j = 0; j < data[0].length; j++) {
         if (data[i][j] === 0) {
@@ -259,7 +259,7 @@ class Tetris {
   }
 
   // 重置方块位置
-  resetPos (type = 'set'): void {
+  resetPos(type = 'set'): void {
     const currSquare = this.currSquare as Square
     let i: number, j: number
     const x = currSquare.origin.x
@@ -281,7 +281,7 @@ class Tetris {
   }
 
   // 旋转方块
-  rotate (): void {
+  rotate(): void {
     const currSquare = this.currSquare as Square
     if (currSquare.canRotate(this.stageArray)) {
       this.resetPos('clear')
@@ -293,7 +293,7 @@ class Tetris {
   }
 
   // 左移方块
-  left (): void {
+  left(): void {
     const currSquare = this.currSquare as Square
     if (currSquare.canLeft(this.stageArray)) {
       this.resetPos('clear')
@@ -305,7 +305,7 @@ class Tetris {
   }
 
   // 右移方块
-  right (): void {
+  right(): void {
     const currSquare = this.currSquare as Square
     if (currSquare.canRight(this.stageArray)) {
       this.resetPos('clear')
@@ -317,7 +317,7 @@ class Tetris {
   }
 
   // 下移方块
-  down (isManual = false): boolean {
+  down(isManual = false): boolean {
     const currSquare = this.currSquare as Square
     // 判断是否能继续下降
     if (currSquare.canDown(this.stageArray)) {
@@ -332,16 +332,16 @@ class Tetris {
   }
 
   // 落下方块
-  fall (): void {
+  fall(): void {
     /* eslint-disable no-empty */
-    while (this.down()) {}
+    while (this.down()) { }
     if (!this.isPause && !this.isGameOver) {
       this.audio.play('move')
     }
   }
 
   // 方块移动到底部，固定方块
-  fixed (): void {
+  fixed(): void {
     const currSquare = this.currSquare as Square
     let i: number, j: number
     const data = currSquare.data
@@ -359,7 +359,7 @@ class Tetris {
   }
 
   // 检查游戏结束
-  checkGameOver (): boolean {
+  checkGameOver(): boolean {
     for (let i = 0; i < this.stageArray[0].length; i++) {
       if (this.stageArray[0][i] === 1) {
         this.audio.play('death')
@@ -372,7 +372,7 @@ class Tetris {
   }
 
   // 使用下一个方块
-  performNext (type: number, dir: number): void {
+  performNext(type: number, dir: number): void {
     this.currSquare = this.nextSquare
     this.resetPos('set')
     this.nextSquare = this.make(type, dir)
@@ -381,7 +381,7 @@ class Tetris {
   }
 
   // 清除填满方块的整行
-  checkClear (): number {
+  checkClear(): number {
     let i: number
     let j: number
     let m: number
@@ -434,7 +434,7 @@ class Tetris {
   // }
 
   // 创建方块(组)
-  make (index = 1, dir: number): Square {
+  make(index = 1, dir: number): Square {
     const s: Square = new Square(index)
     s.origin.x = 0
     s.origin.y = 3
@@ -448,7 +448,7 @@ class Tetris {
    * *******************************************************
    */
   // 下落
-  move (): void {
+  move(): void {
     if (!this.down()) {
       this.fixed()
       const line: number = this.checkClear()
@@ -462,7 +462,7 @@ class Tetris {
   }
 
   // 暂停游戏
-  pause (): void {
+  pause(): void {
     if (this.isGameOver) return
     if (this.isPause) {
       this.audio.play('bgm', true)
@@ -491,7 +491,7 @@ class Tetris {
   }
 
   // 重新开始游戏
-  restart (): void {
+  restart(): void {
     if (this.moveTimer) {
       clearInterval(this.moveTimer)
       this.moveTimer = null
@@ -537,7 +537,7 @@ class Tetris {
   }
 
   // gameOver
-  stop (): void {
+  stop(): void {
     this.isGameOver = true
     if (this.moveTimer) {
       clearInterval(this.moveTimer)
@@ -547,7 +547,7 @@ class Tetris {
   }
 
   // 游戏进行时间，单位秒
-  gameTimeMeter (): void {
+  gameTimeMeter(): void {
     // @ts-ignore
     this.gameTimer = setInterval(() => {
       this.gameTimes++
@@ -564,7 +564,7 @@ class Tetris {
   }
 
   // 游戏分数统计
-  addScore (line: number): void {
+  addScore(line: number): void {
     let s = 0
     switch (line) {
       case 1:
@@ -587,7 +587,7 @@ class Tetris {
   }
 
   // 设置下落时间间隔/速度控制
-  setDownInterval (score: number): void {
+  setDownInterval(score: number): void {
     if (score > 640000) {
       this._updateSpeed(100)
     } else if (score > 320000) {
@@ -618,7 +618,7 @@ class Tetris {
   }
 
   // 初始化游戏
-  init (): void {
+  init(): void {
     // 创建游戏DOM
     this.createGameDom()
     this.nextSquare = this.make(util.rand(7), util.rand(4))
@@ -711,7 +711,10 @@ class Tetris {
     this.audio.addSource(resources, progress => {
       this.isLoaded = progress === 1
       startButton.innerText = this.isLoaded ? 'Start' : Math.round(progress * 100) + '%'
-    }).then(() => console.log('audio loaded!'))
+    }).then(() => {
+      this.opts.ready({ code: 0, msg: `${CODES[0]} in '${this.opts.container}', and medias is loaded.` })
+      console.log('audio loaded!')
+    })
     // this.audio.addSource('bgm', require('./img/bgm.mp3').default)
     // this.audio.addSource('move', require('./img/bubble2.mp3').default)
     // this.audio.addSource('death', require('./img/game-over-tetries.mp3').default)

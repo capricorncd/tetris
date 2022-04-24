@@ -23,7 +23,7 @@
 <script src="./tetris.min.js"></script>
 <!--<script src="./tetris.js"></script>-->
 <script>
-  new Tetris({
+  window.tetris = new Tetris({
     container: '#app',
     error: function (err) {
       alert(err.msg)
