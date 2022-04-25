@@ -82,3 +82,5 @@ sw.*
 .log*
 test-results/
 playwright-report/
+
+cypress/integration
