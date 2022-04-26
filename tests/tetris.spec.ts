@@ -24,7 +24,9 @@ test.describe('Before Game Start', () => {
   })
 
   test('点击Start按钮，loading图层被隐藏', async ({ page }) => {
-    await page.waitForLoadState('load')
+    // await page.waitForLoadState('load')
+    await page.waitForTimeout(2000)
+    await expect(await page.waitForSelector('.tetris-start-button-wrapper >> text=Start')).toBeTruthy()
     await page.locator('.tetris-start-button-wrapper button').click()
     const startWrapper = page.locator('.tetris-start-button-wrapper')
     await expect(startWrapper).toBeHidden()
