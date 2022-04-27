@@ -15,7 +15,11 @@ npm i zx-tetris
 ## Start
 
 ```bash
+# develop
 npm run dev
+
+# test
+npm run test
 ```
 
 http://localhost:9000
